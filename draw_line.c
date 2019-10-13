@@ -1,0 +1,138 @@
+#include "head.h"
+
+// int		set_pixel(t_fdf *fdf, t_line *line)
+// {
+// 	double	perc;
+
+// 	if (line->x0 < 0 || line->x0 >= fdf->wid || line->x1 < 0 || line->x1 >= fdf->wid
+// 		|| line->y0 < 0 || line->y0 >= fdf->hei || line->y1 < 0 || line->y1 >= fdf->hei)
+// 		return (1);
+// 	// perc = line->dx > line->dy ?
+// }
+
+// void	draw_line(t_fdf *fdf, t_3dmap map1, t_3dmap map2)
+// {
+// 	t_line line;
+
+// 	line.x0 = (int)map1.x;
+// 	line.y0 = (int)map1.y;
+// 	line.x1 = (int)map2.x;
+// 	line.y1 = (int)map2.y;
+
+// 	line.dx = (int)abs((int)line.x0 - (int)line.x1);
+// 	line.dy = (int)abs((int)line.y0 - (int)line.y1);
+
+// 	line.sx = (int)line.x0 < (int)line.x1 ? 1 : -1;
+// 	line.sy = (int)line.y0 < (int)line.y1 ? 1 : -1;
+// 	line.err = (line.dx > line.dy ? line.dx : - line.dy) / 2;
+// 	while (line.x0 != line.x1 || line.y0 != line.y1)
+// 	{
+// 		if (!set_pixel(fdf, &line))
+// 			break ;
+// 	}
+// }
+
+
+// --------------------- bresengham
+void	draw_line_bresengham(t_fdf *fdf, int x0, int y0, int x1, int y1)
+{
+	int		err;
+	int		dx;
+	int		dy;
+	float	derr;
+	int		x;
+	int		y;
+	int		y_step	;
+	int steep;
+
+	steep = (abs(y1 - y0)) > (abs(x1 - x0));
+	if (steep)
+	{
+		ft_swap(x0, y0);
+		ft_swap(x1, y1);
+	}
+	if (x0 > x1)
+	{
+		ft_swap(x0, x1);
+		ft_swap(y0, y1);
+	}
+	dx = x1 - x0;
+	dy = abs(y1 - y0);
+	err = dx / 2;
+	derr = dy;
+
+	y_step = (y0 < y1) ? 1 : -1;
+	x = x0;
+	y = y0;
+	while (x <= x1)
+	{
+		// printf("x = %d y = %d\n", x ,y);
+		mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, steep ? y : x,steep ? x : y, fdf->color);
+		err = err - dy;
+		if (err < 0)
+		{
+			y = y + y_step;
+			err = err + dx;
+		}
+		x++;
+	}
+
+}
+
+void	draw_pixel(t_fdf *fdf, int x, int y, float bright)
+{
+	mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, x, y, fdf->color * (1 - bright));
+}
+
+
+float fPartOfNumber(float x) 
+{ 
+    if (x >= 0.0)
+		return (x - (int)x);
+    else
+		return (x - ((int)x + 1)); 
+}
+
+// -----------------------------xiaolin wu
+void	draw_line_wu(t_fdf *fdf, int x0, int y0, int x1, int y1)
+{
+	int		steep;
+	float	dx;
+	float	dy;
+	float	gradient;
+	float	intersect_y;
+
+	int		xpxl1;
+	int		xpxl2;
+	int		x;
+
+	int abs1, abs2;
+
+	steep = (abs1 = abs(y1 - y0)) > (abs2 = abs(x1 - x0));
+	if (steep)
+	{
+		ft_swap(x0, y0);
+		ft_swap(x1, y1);
+	}
+	if (x0 >= x1)
+	{
+		ft_swap(x0, x1);
+		ft_swap(y0, y1);
+	}
+	dx = x1 - x0;
+	dy = y1 - y0;
+	gradient = dy / dx;
+	if (dx == 0.0)
+		gradient = 1.0;
+	xpxl1 = x0;
+	xpxl2 = x1;
+	intersect_y = y0;
+	x = xpxl1;
+	while (x <= xpxl2)
+	{
+		draw_pixel(fdf, steep ? (int)intersect_y : x, steep ? x : (int)intersect_y, 1 - fPartOfNumber(intersect_y));
+		draw_pixel(fdf, steep ? (int)intersect_y - 1 : x, steep ? x : (int)intersect_y - 1, fPartOfNumber(intersect_y));
+		intersect_y += gradient;
+		x++;
+	}
+}
