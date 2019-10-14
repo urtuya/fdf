@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include "libft/inc/libft.h"
 
+# define WID 1000
+# define HEI 1000
 typedef	enum	e_projection
 {
 	iso,
@@ -22,18 +24,13 @@ typedef struct	s_coordinates
 
 typedef struct	s_line
 {
-	int		x0;
-	int		y0;
-	int		x1;
-	int		y1;
-	int		sy;
-	int		sx;
 	int		dx;
 	int		dy;
-	float	err;
+	int		err;
 	int		x;
 	int		y;
-	int		diry;
+	int		sx;
+	int		sy;
 }				t_line;
 
 typedef struct	s_3dmap
@@ -48,12 +45,15 @@ typedef struct	s_fdf
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
+	int		siz;
 	int		color;
 	t_coor	coor;
 
 	int		hei;
 	int		wid;
 	int		fd;
+	int		offx;
+	int		offy;
 
 	double	**zarr;
 	int		map_len;

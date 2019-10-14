@@ -33,19 +33,19 @@ int	loop()
 	return (0);
 }
 
-void	fill_white(t_fdf *fdf, int height, int width)
-{
-	int x;
-	int y;
+// void	fill_white(t_fdf *fdf, int height, int width)
+// {
+// 	int x;
+// 	int y;
 
-	x = 0;
-	fdf->color = 0xFFFFFF;
-	while (x <= height)
-	{
-		draw_line_bresengham(fdf, 0, x, width, x);
-		x++;
-	}
-}
+// 	x = 0;
+// 	fdf->color = 0xFFFFFF;
+// 	while (x <= height)
+// 	{
+// 		draw_line_bresengham(fdf, 0, x, width, x);
+// 		x++;
+// 	}
+// }
 
 t_fdf	*init_fdf(char *map)
 {
@@ -56,6 +56,7 @@ t_fdf	*init_fdf(char *map)
 	fdf->wid = 0;
 	fdf->hei = 0;
 	fdf->color = 0xEE82EE;
+	fdf->siz = 5;
 	if ((fd = open(map, O_RDONLY)) < 0)
 	{
 		fprintf(stderr, "fd error\n");
@@ -68,9 +69,10 @@ t_fdf	*init_fdf(char *map)
 		exit(1);
 	}
 	fill_zarr(fdf, fd);
-	fill_3dmap(fdf); 
+	fill_3dmap(fdf);
+	set_offset(fdf);
 	fdf->mlx_ptr = mlx_init();
-	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, 500, 500, "square");
+	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, HEI, WID, "square 1000x1000");
 
 	return (fdf);
 }
@@ -83,58 +85,8 @@ int main(int argc, char **argv)
 	void	*img;
 	char	*img_ptr;
 
-	// fill_white(fdf, height, width);
-	// fdf->color = 0xFFFFFF;
-	// draw_line_wu(fdf, 100, 100, 101, 200);
-	// draw_line_bresengham(fdf, 100, 100, 200, 200);
-	
-	// draw_line_bresengham(fdf, 200, 100, 200, 250);
-// fdf->color = 0x07FFFF;
-	// draw_line_bresengham(fdf, 200, 100, 300, 50);
-	// draw_lines_between_coords(fdf);
-
-	// img = mlx_new_image(fdf->mlx_ptr, 100, 1);
-	// img->ptr = 	
-	// mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, img_ptr, 100, 1);
-
-	int i;
-	int j;
-	int offset = 0;
-	printf("hei = %d\n",fdf->hei);
-	printf("k = %d\n", fdf->map_len);
-	i = 20;
-	while (i <= fdf->hei * 20)
-	{
-		printf("x1 = %.f y1 = %.f\n", fdf->map[i].x, fdf->map[i].y);
-		printf("x2 = %.f y2 = %.f\n", fdf->map[i + fdf->hei].x, fdf->map[i + fdf->hei].y);
-		offset = 40;
-		j = 20;
-		while (j <= offset)
-		{
-			mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, i, j, fdf->color);
-			j++;
-		}
-		i+=20;
-	}
-
-
-	j = 20;
-	while (j <= fdf->wid * 20)
-	{
-		i = 20;
-		while (i <= 40)
-		{
-			mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, i, j, fdf->color);
-			i++;
-		}
-		j += 20;
-	}
-
-
-
+	// draw(fdf);
+	draw_isometric(fdf);
 	mlx_loop(fdf->mlx_ptr);
-
-
-
 	return (0);
 }
