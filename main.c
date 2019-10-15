@@ -10,37 +10,6 @@ void	check_malloc(void *addr)
 	
 }
 
-int	deal_key()
-{
-	write(1, "key\n", 4);
-	return (0);
-}
-int wtf()
-{
-	write(1, "wtf\n", 4);
-	return (0);
-}
-
-int	loop()
-{
-	write(1, "loop\n", 5);
-	return (0);
-}
-
-// void	fill_white(t_fdf *fdf, int height, int width)
-// {
-// 	int x;
-// 	int y;
-
-// 	x = 0;
-// 	fdf->color = 0xFFFFFF;
-// 	while (x <= height)
-// 	{
-// 		draw_line_bresengham(fdf, 0, x, width, x);
-// 		x++;
-// 	}
-// }
-
 t_fdf	*init_fdf(char *map)
 {
 	t_fdf	*fdf;
@@ -82,7 +51,7 @@ int	mouse(int button, int x, int y, t_fdf *fdf)
 		fdf->siz += 0.0001;
 	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
 	// fill_3dmap(fdf);
-	draw_iso(fdf, fdf->map);
+	draw_rot(fdf, fdf->map);
 	printf("siz = %f\n", fdf->siz);
 	
 	return (0);
@@ -92,15 +61,27 @@ int mouse_press(int button, int x, int y, t_fdf *fdf)
 {
 	// if (button == 4)
 	// 	fdf->siz
+	return (0);
+}
+int	key_press(int keykode, t_fdf *fdf)
+{
+	if (keykode == 12)
+	{
+		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
+		draw_parallel(fdf);
+	}
+	return (0);
 }
 
 int	mouse_release(int button, int x, int y, t_fdf *fdf)
 {
-	if (button == 1)
-	{
-		mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
-		draw_iso(fdf, fdf->map);
-	}
+	// if (button == 1)
+	// {
+	// 	printf("MOUSE_%d: %d:%d\n", button, x,y);
+	// 	mlx_clear_window(fdf->mlx_ptr, fdf->win_ptr);
+	// 	draw_rot(fdf, fdf->map, x, y);
+	// }
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -110,10 +91,10 @@ int main(int argc, char **argv)
 	fdf = init_fdf(argv[1]);
 
 	draw_iso(fdf, fdf->map);
-	rotation(fdf);
-	// mlx_mouse_hook(fdf->win_ptr, mouse, fdf);
-	// mlx_hook(fdf->win_ptr, 5, 0, mouse_release, fdf);
 
+	// mlx_mouse_hook(fdf->win_ptr, mouse, fdf);
+	mlx_hook(fdf->win_ptr, 5, 0, mouse_release, fdf);
+	mlx_hook(fdf->win_ptr, 2, 0, key_press, fdf);
 	mlx_loop(fdf->mlx_ptr);
 	return (0);
 }
