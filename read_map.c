@@ -52,6 +52,7 @@ void	fill_zarr(t_fdf *fdf, int fd)
 {
 	int	i;
 	int	j;
+	int k;
 	char *line;
 	char **tmp;
 
@@ -68,9 +69,11 @@ void	fill_zarr(t_fdf *fdf, int fd)
 		tmp = ft_strsplit(line, ' ');
 		fdf->zarr[i] = (double*)malloc(sizeof(double) * fdf->wid);
 		j = 0;
+		k = fdf->wid - 1;
 		while (j < fdf->wid)
 		{
-			fdf->zarr[i][j] = (double)ft_atoi(tmp[j]);
+			fdf->zarr[i][j] = (double)ft_atoi(tmp[k]);
+			k--;
 			j++;
 		}
 		ft_freesplit(tmp);
@@ -82,24 +85,25 @@ void	fill_3dmap(t_fdf *fdf)
 {
 	int		i;
 	int		j;
-	int		k;
 
-	fdf->map = (t_3dmap*)malloc(sizeof(t_3dmap) * (fdf->wid * fdf->hei + 1));
+	fdf->map = (t_3dmap**)malloc(sizeof(t_3dmap*) * (fdf->hei));
 	i = 0;
-	k = 0;
+	while (i < fdf->hei)
+	{
+		fdf->map[i] = (t_3dmap*)malloc(sizeof(t_3dmap) * (fdf->wid));
+		i++;
+	}
+	i = 0;
 	while (i < fdf->hei)
 	{
 		j = 0;
 		while (j < fdf->wid)
 		{
-			fdf->map[k].x = (double)i;
-			fdf->map[k].y = (double)j;
-			fdf->map[k].z = fdf->zarr[i][j];
-			fdf->map[k].color = 0xFFFFFF;
-			k++;
+			fdf->map[i][j].x = (double)i - fdf->x_err;
+			fdf->map[i][j].y = (double)j - fdf->y_err;
+			fdf->map[i][j].z = fdf->zarr[i][j] * fdf->h_zarr;
 			j++;
 		}
 		i++;
 	}
-	fdf->map_len = k;
 }

@@ -109,17 +109,17 @@
 
 
 
-void	draw_line(t_fdf *fdf, t_coor cr1, t_coor cr2)
+void	draw_line(t_fdf *fdf, t_coor cr1, t_coor cr2, int flag)
 {
 	t_line	ln;
 	int		e2;
 
-	if (cr1.x > cr2.x || cr1.y > cr2.y)
+	if (cr1.x > cr2.x)
 	{
 		ft_swap(&cr1.x, &cr2.x);
 		ft_swap(&cr1.y, &cr2.y);
 	}
-	ln.dx = abs(cr2.x - cr1.x);
+	ln.dx = abs(1 / (cr2.x - cr1.x));
 	ln.sx = cr1.x < cr2.x ? 1 : -1;
 	ln.dy = -abs(cr2.y - cr1.y);
 	ln.sy = cr1.y < cr2.y ? 1 : -1;
@@ -128,7 +128,7 @@ void	draw_line(t_fdf *fdf, t_coor cr1, t_coor cr2)
 	ln.y = cr1.y;
 	while (ln.x <= cr2.x && ln.y <= cr2.y)
 	{
-		mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, ln.y, ln.x, fdf->color);
+		mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, ln.y + fdf->offx, ln.x + fdf->offy, fdf->color);
 		e2 = 2 * ln.err;
 		if (e2 >= ln.dy)
 		{
@@ -139,6 +139,83 @@ void	draw_line(t_fdf *fdf, t_coor cr1, t_coor cr2)
 		{
 			ln.err += ln.dx;
 			ln.y += ln.sy;
+		}
+	}
+}
+
+
+
+void	draw2(t_fdf *fdf, t_coor cr1, t_coor cr2)
+{
+	t_line ln;
+	int dx1;
+	int dy1;
+	int xe;
+	int ye;
+
+	ln.dx = cr2.x - cr1.x;
+	ln.dy = cr2.y - cr1.y;
+	dx1 = abs(ln.dx);
+	dy1 = abs(ln.dy);
+	ln.sx = 2.0 * dy1 - dx1;
+	ln.sy = 2.0 * dx1 - dy1;
+	if (dy1 <= dx1)
+	{
+		if (ln.dx >= 0)
+		{
+			ln.x = cr1.x;
+			ln.y = cr1.y;
+			xe = cr2.x;
+		}
+		else
+		{
+			ln.x = cr2.x;
+			ln.y = cr2.y;
+			xe = cr1.x;
+		}
+		while (ln.x < xe)
+		{
+			mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, ln.x + fdf->offx, ln.y + fdf->offy, fdf->color);
+			ln.x++;
+			if (ln.sx < 0)
+				ln.sx += 2 * dy1;
+			else
+			{
+				if ((ln.dx < 0 && ln.dy < 0) || (ln.dx >0 && ln.dy > 0))
+					ln.y++;
+				else
+					ln.y--;
+				ln.sx += 2 * (dy1 - dx1);
+			}
+		}
+	}
+	else
+	{
+		ln.x = cr2.x;
+		ln.y = cr2.y;
+		ye = cr1.y;
+		if (ln.dy >= 0)
+		{
+			ln.x = cr1.x;
+			ln.y = cr1.y;
+			ye = cr2.y;
+		}
+		while (ln.y < ye)
+		{
+			mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, ln.x + fdf->offx, ln.y + fdf->offy, fdf->color);
+			ln.y++;
+			if (ln.sy <= 0)
+				ln.sy += 2 * dx1;
+			else
+			{
+				if ((ln.dx < 0 && ln.dy < 0) || (ln.dx >0 && ln.dy > 0))
+					ln.x++;
+				else
+					ln.x--;
+				ln.sy += 2 * (dx1 - dy1);
+			}
+			
+
 		}
 	}
 }

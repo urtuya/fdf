@@ -45,19 +45,23 @@ typedef struct	s_fdf
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	int		siz;
+	double		siz;
 	int		color;
 	t_coor	coor;
 
 	int		hei;
 	int		wid;
-	int		fd;
+	double	x_err;
+	double	y_err;
+
 	int		offx;
 	int		offy;
 
+	double	angle;
+	double	h_zarr;
 	double	**zarr;
 	int		map_len;
-	t_3dmap	*map;
+	t_3dmap	**map;
 }				t_fdf;
 
 

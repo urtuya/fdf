@@ -18,7 +18,8 @@ CFILES = ft_atoi.c ft_lstdel.c ft_memcpy.c\
 		 get_next_line.c ft_memcmp.c ft_putnbr.c ft_strdel.c\
 		 ft_strmapi.c ft_strstr.c ft_ex_arrdel.c ft_ex_matdel.c\
 		 ft_ex_prnt.c ft_ex_prnt_arr.c ft_change_val.c ft_matrix.c\
-		 ft_ftoa.c intmax_toa.c uintmax_toa.c ft_freesplit.c ft_swap.c
+		 ft_ftoa.c intmax_toa.c uintmax_toa.c ft_freesplit.c ft_swap.c\
+		 ft_min_max.c
 HFILES = inc/
 SRC_DIR = src/
 SRC = $(addprefix $(SRC_DIR), $(CFILES))

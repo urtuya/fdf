@@ -37,10 +37,12 @@ char			*ft_strrchr(const char *s, int c);
 char			*ft_strstr(const char *haystack, const char *needle);
 char			*ft_strnstr(const char *haystack,
 										const char *needle, size_t len);
-void			ft_swap(int a, int b);
+void			ft_swap(int *a, int *b);
 void			ft_freesplit(char **str);
 int				ft_strcmp(const char *s1, const char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
+intmax_t		ft_min(intmax_t a, intmax_t b);
+intmax_t		ft_max(intmax_t a, intmax_t b);
 int				ft_atoi(const char *str);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
