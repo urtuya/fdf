@@ -104,17 +104,17 @@ void    draw(t_fdf *fdf)
         while (j < fdf->full->wid)
         {
             now = fdf->map[i][j];
-            set_iso_coords(&now, fdf->siz);
+            set_iso_coords(&now, fdf->siz, fdf->h_zarr);
             if (j < fdf->full->wid - 1)
             {
                 next = fdf->map[i][j + 1];
-                set_iso_coords(&next, fdf->siz);
+                set_iso_coords(&next, fdf->siz, fdf->h_zarr);
                 draw_lines(fdf, now, next);//fdf->map[i][j], fdf->map[i][j + 1]);
             }
             if (i < fdf->full->hei - 1)
             {
                 next = fdf->map[i + 1][j];
-                set_iso_coords(&next, fdf->siz);
+                set_iso_coords(&next, fdf->siz, fdf->h_zarr);
                 draw_lines(fdf, now, next);//fdf->map[i][j], fdf->map[i + 1][j]);
             }
             j++;

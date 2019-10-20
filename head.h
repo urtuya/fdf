@@ -12,13 +12,16 @@
 typedef struct	s_mouse
 {
 	int	left;
+	// int	r_left;
+	int	right;
 	int	x;
 	int y;
 }				t_mouse;
 
 typedef struct	s_key
 {
-	int	h_release;
+	int	h_key;
+	int	anykey_ispressed;
 }				t_key;
 
 typedef struct	s_coordinates
@@ -103,6 +106,7 @@ int     mouse_move(int x, int y, t_fdf *fdf);
 int     mouse_release(int btn, int x, int y, t_fdf *fdf);
 int     mouse_press(int btn, int x, int y, t_fdf *fdf);
 int     key_release(int keykode, t_fdf *fdf);
+int     key_press(int keykode, t_fdf *fdf);
 
 //rotation.c
 void    rotation(t_3dmap *map, t_fdf *fdf);

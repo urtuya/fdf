@@ -15,7 +15,8 @@ void		init_mouse_keys(t_fdf *fdf)
 	fdf->ms.left = 0;
 	fdf->ms.x = 0;
 	fdf->ms.y = 0;
-	fdf->key.h_release = 0;
+	fdf->key.h_key = 0;
+	fdf->key.anykey_ispressed = 0;
 }
 
 static void	set_off(t_fdf *fdf)
@@ -66,6 +67,7 @@ void		apply_hooks(t_fdf *fdf)
 	mlx_hook(fdf->full->win, 4, 0, mouse_press, fdf);
 	mlx_hook(fdf->full->win, 5, 0, mouse_release, fdf);
 	mlx_hook(fdf->full->win, 6, 0, mouse_move, fdf);
+	mlx_hook(fdf->full->win, 2, 0, key_press, fdf);
 	mlx_hook(fdf->full->win, 3, 0, key_release, fdf);
 }
 
