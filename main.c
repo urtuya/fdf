@@ -54,6 +54,7 @@ t_fdf		*init_fdf(char *filename)
 	read_map(fdf, fd);
 	init_zarr(fdf, fd, filename);
 	set_off(fdf);
+	init_cam(fdf);
 	init_3dmap(fdf);
 	init_mouse_keys(fdf);
 	//init_mouse(&fdf->ms, fdf->full);
@@ -83,7 +84,8 @@ int			main(int argc, char **argv)
 	}
 	fdf = init_fdf(argv[1]);
 	fdf->flag = 0;
-	draw(fdf);
+	draw(fdf, ISO);
+	// ultra_draw(fdf); //this hleb
 	apply_hooks(fdf);
 	mlx_loop(fdf->full->mlx);
 	return (0);

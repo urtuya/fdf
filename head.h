@@ -9,6 +9,19 @@
 # define HEI 1000
 # define WID 1000
 
+typedef enum	e_projection
+{
+	ISO,
+	PARALLEL
+}				t_proj;
+
+typedef struct	s_camera
+{
+	double	x;
+	double	y;
+	double	radius;
+}				t_cam;
+
 typedef struct	s_mouse
 {
 	int	left;
@@ -22,7 +35,16 @@ typedef struct	s_key
 {
 	int	h_key;
 	int	anykey_ispressed;
+	int	proj;
 }				t_key;
+
+typedef struct	s_perspective
+{
+	double	fovy;
+	double	near;
+	double	far;
+}				t_pers;
+
 
 typedef struct	s_coordinates
 {
@@ -68,6 +90,10 @@ typedef struct	s_fdf
 	t_angle	ang;
 	t_mouse ms;
 	t_key	key;
+	t_proj	proj;
+	t_cam	cam;
+	double	matrix[4][4];
+	double	r;
 
 	double	h_zarr;
 	double	siz;
@@ -96,10 +122,12 @@ void	read_map(t_fdf *fdf, int fd);
 void    init_3dmap(t_fdf *fdf);
 
 //draw.c
-void	draw(t_fdf *fdf);
+void	draw(t_fdf *fdf, t_proj proj);
 
 //iso.c
 void    iso_coords(t_fdf *fdf);
+void	clean_main_map(t_fdf *fdf);
+void	rotate(t_fdf *fdf);
 
 //hooks.c
 int     mouse_move(int x, int y, t_fdf *fdf);
@@ -108,5 +136,5 @@ int     mouse_press(int btn, int x, int y, t_fdf *fdf);
 int     key_release(int keykode, t_fdf *fdf);
 int     key_press(int keykode, t_fdf *fdf);
 
-//rotation.c
-void    rotation(t_3dmap *map, t_fdf *fdf);
+//perspective.c
+void	draw2(t_fdf *fdf);
