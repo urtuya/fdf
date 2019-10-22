@@ -62,7 +62,7 @@ int		mouse_press(int btn, int x, int y, t_fdf *fdf)
 	{
 		fdf->siz *= btn == 4 ? 1.1 : 0.9;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw2(fdf);
+		draw(fdf);
 	}
 	return (0);
 }
