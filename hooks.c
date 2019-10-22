@@ -31,7 +31,9 @@ int		key_release(int keykode, t_fdf *fdf)
 		fdf->proj = PARALLEL;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
 		clean_main_map(fdf);
-		draw(fdf, fdf->proj);
+		find_min_max(fdf);
+		// matrix(fdf);
+		draw2(fdf);
 	}
 	fdf->key.anykey_ispressed = fdf->key.h_key != 0 ? 1 : 0;
 	return (0);
@@ -54,13 +56,13 @@ int		mouse_press(int btn, int x, int y, t_fdf *fdf)
 		printf("h_zarr = %.f\n", fdf->h_zarr);
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
 		//clean_main_map(fdf);
-		draw(fdf, proj);
+		draw(fdf);
 	}
 	else if (!fdf->key.anykey_ispressed && (btn == 4 || btn == 5))
 	{
 		fdf->siz *= btn == 4 ? 1.1 : 0.9;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw(fdf, proj);
+		draw2(fdf);
 	}
 	return (0);
 }
@@ -88,10 +90,18 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 	fdf->ms.y = y;
 	if (fdf->ms.left == 1)
 	{
-		fdf->ang.a_y = round((double)(y - prev_y) * 0.2);
-		fdf->ang.a_x = round((double)(x - prev_x) * 0.2);
+		// if (fdf->proj == ISO)
+		// {
+		fdf->ang.a_y = (double)(y - prev_y) * 0.2;
+		fdf->ang.a_x = (double)(x - prev_x) * 0.2;
+		// }
+		// else if (fdf->proj == PARALLEL)
+		// {
+		// 	fdf->ang.a_y = (double)y;
+		// 	fdf->ang.a_x = (double)x;
+		// }
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw(fdf, proj);
+		draw2(fdf);
 	}
 	return (0);
 }

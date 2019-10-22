@@ -47,7 +47,6 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 	int		i;
 	int		j;
 	char	**tmp;
-	int		k;
 
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		exit(1);
@@ -56,24 +55,89 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 	while (i < fdf->full->hei)
 	{
 		if (get_next_line(fd, &line) < 0)
-		{
-			fprintf(stderr, "readfile error\n");
-			exit(1);
-		}
+			print_error("gnl err");
 		check_malloc(tmp = ft_strsplit(line, ' '));
 		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double) * fdf->full->wid));
 		j = 0;
-		// k = fdf->full->wid - 1;
 		while (j < fdf->full->wid)
 		{
 			fdf->zarr[i][j] = (double)ft_atoi(tmp[j]);
-			// k--;
 			j++;
 		}
 		ft_freesplit(tmp);
 		i++;
 	}
 }
+
+// void	normalize_z(t_fdf *fdf)
+// {
+// 	int i;
+// 	int j;
+// 	double	mn;
+// 	double	mx;
+
+// 	mn = fdf->map[0][0].z;
+// 	mx = fdf->map[0][0].z;
+// 	i = 0;
+// 	while (i < fdf->full->hei)
+// 	{
+// 		j = 0;
+// 		while (j < fdf->full->wid)
+// 		{
+// 			mn = fdf->map[i][j].z < mn ? fdf->map[i][j].z : mn;
+// 			mx = fdf->map[i][j].y
+// 		}
+// 	}
+// }
+double	get_max_z(double **zarr, int hei, int wid)
+{
+	double	ret;
+	double	mn;
+	double	mx;
+	int		i;
+	int		j;
+
+	i = 0;
+	mn = zarr[0][0];
+	mx = zarr[0][0];
+	while (i < hei)
+	{
+		j = 0;
+		while (j < wid)
+		{
+			mn = zarr[i][j] < mn ? zarr[i][j] : mn;
+			mx = zarr[i][j] > mx ? zarr[i][j] : mx;
+			j++;
+		}
+		i++;
+	}
+	mx = fabs(mx) / 4;
+	mn = fabs(mn) / 4;
+	return (mx > mn ? mx : mn);
+}
+
+void	normalize_z(t_fdf *fdf)
+{
+	int		i;
+	int		j;
+	double	zdivisor;
+
+	zdivisor = get_max_z(fdf->zarr, fdf->full->hei, fdf->full->wid);
+	if (!zdivisor)
+		return ;
+	i = 0;
+	while (i < fdf->full->hei)
+	{
+		j = 0;
+		while (j < fdf->full->wid)
+		{
+			fdf->zarr[i][j] /= zdivisor;
+			j++;
+		}
+		i++;
+	}
+}
+
 
 void			init_3dmap(t_fdf *fdf)
 {

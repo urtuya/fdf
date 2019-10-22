@@ -15,17 +15,9 @@ typedef enum	e_projection
 	PARALLEL
 }				t_proj;
 
-typedef struct	s_camera
-{
-	double	x;
-	double	y;
-	double	radius;
-}				t_cam;
-
 typedef struct	s_mouse
 {
 	int	left;
-	// int	r_left;
 	int	right;
 	int	x;
 	int y;
@@ -91,7 +83,6 @@ typedef struct	s_fdf
 	t_mouse ms;
 	t_key	key;
 	t_proj	proj;
-	t_cam	cam;
 	double	matrix[4][4];
 	double	r;
 
@@ -99,7 +90,8 @@ typedef struct	s_fdf
 	double	siz;
 	int		offx;
 	int		offy;
-	int		flag;
+	int		flag_iso;
+	int		flag_per;
 }				t_fdf;
 
 typedef struct	s_line
@@ -114,27 +106,27 @@ typedef struct	s_line
 }				t_line;
 
 //main.c
-void	check_malloc(void	*data);
+void			check_malloc(void	*data);
 
 //init.c
-void	init_zarr(t_fdf *fdf, int fd, char *filename);
-void	read_map(t_fdf *fdf, int fd);
-void    init_3dmap(t_fdf *fdf);
+void			init_zarr(t_fdf *fdf, int fd, char *filename);
+void			read_map(t_fdf *fdf, int fd);
+void    		init_3dmap(t_fdf *fdf);
 
 //draw.c
-void	draw(t_fdf *fdf, t_proj proj);
+void			draw(t_fdf *fdf);
 
 //iso.c
-void    iso_coords(t_fdf *fdf);
-void	clean_main_map(t_fdf *fdf);
-void	rotate(t_fdf *fdf);
+void			iso_coords(t_fdf *fdf);
+void			clean_main_map(t_fdf *fdf);
+void			rotate(t_fdf *fdf);
 
 //hooks.c
-int     mouse_move(int x, int y, t_fdf *fdf);
-int     mouse_release(int btn, int x, int y, t_fdf *fdf);
-int     mouse_press(int btn, int x, int y, t_fdf *fdf);
-int     key_release(int keykode, t_fdf *fdf);
-int     key_press(int keykode, t_fdf *fdf);
+int				mouse_move(int x, int y, t_fdf *fdf);
+int				mouse_release(int btn, int x, int y, t_fdf *fdf);
+int				mouse_press(int btn, int x, int y, t_fdf *fdf);
+int				key_release(int keykode, t_fdf *fdf);
+int				key_press(int keykode, t_fdf *fdf);
 
 //perspective.c
-void	draw2(t_fdf *fdf);
+void			draw2(t_fdf *fdf);

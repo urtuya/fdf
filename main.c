@@ -38,6 +38,12 @@ static void	set_off(t_fdf *fdf)
 	fdf->full->y_err = fdf->full->wid / 2;
 }
 
+void	print_error(char *str)
+{
+	fprintf(stderr, "%s\n", str);
+	exit(1);
+}
+
 t_fdf		*init_fdf(char *filename)
 {
 	t_fdf	*fdf;
@@ -47,14 +53,15 @@ t_fdf		*init_fdf(char *filename)
 	check_malloc(fdf->full = (t_map*)malloc(sizeof(t_map)));
 	fdf->full->wid = 0;
 	fdf->full->hei = 0;
+	fdf->flag_iso = 0;
 	fdf->zarr = NULL;
 	fdf->map = NULL;
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		exit (1);
 	read_map(fdf, fd);
 	init_zarr(fdf, fd, filename);
+	normalize_z(fdf);
 	set_off(fdf);
-	init_cam(fdf);
 	init_3dmap(fdf);
 	init_mouse_keys(fdf);
 	//init_mouse(&fdf->ms, fdf->full);
@@ -83,9 +90,7 @@ int			main(int argc, char **argv)
 		exit(1);
 	}
 	fdf = init_fdf(argv[1]);
-	fdf->flag = 0;
-	draw(fdf, ISO);
-	// ultra_draw(fdf); //this hleb
+	draw(fdf);
 	apply_hooks(fdf);
 	mlx_loop(fdf->full->mlx);
 	return (0);
