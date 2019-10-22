@@ -94,7 +94,6 @@ void	draw2(t_fdf *fdf)
 	t_3dmap	next;
 	int		flag;
 
-	printf("siz = %f\n", fdf->siz);
 	flag = 0;
 	i = 0;
 	// clean_main_map(fdf);

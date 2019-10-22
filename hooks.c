@@ -28,7 +28,7 @@ int		key_release(int keykode, t_fdf *fdf)
 	if (keykode == 19)
 	{
 		fdf->key.proj = 1;
-		fdf->proj = PARALLEL;
+		fdf->proj = PARALLEL;  //GET SIZ / 4 AND <->
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
 		clean_main_map(fdf);
 		find_min_max(fdf);
@@ -101,7 +101,7 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 		// 	fdf->ang.a_x = (double)x;
 		// }
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw2(fdf);
+		draw(fdf);
 	}
 	return (0);
 }
