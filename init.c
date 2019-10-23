@@ -7,11 +7,8 @@ static void		check_valid(t_fdf *fdf, char *line)
 	char	**tmp;
 	int		j;
 
-	if (!line)
-	{
-		fprintf(stderr, "there !line\n");
-		exit(1);
-	}
+	if (!line && !*line)
+		print_error("Error while reading map");
 	check_malloc(tmp = ft_strsplit(line, ' '));
 	i = 0;
 	while (tmp[i])
@@ -19,11 +16,8 @@ static void		check_valid(t_fdf *fdf, char *line)
 	if (!fdf->full->wid)
 		fdf->full->wid = i;
 	else if (fdf->full->wid != i)
-	{
-		printf("wid = %d i = %d\n", fdf->full->wid, i);
-		fprintf(stderr, "invalid map\n");
-		exit(1);
-	}
+		print_error("map error");
+	ft_freesplit(tmp);
 }
 
 void			read_map(t_fdf *fdf, int fd)
@@ -50,14 +44,16 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		exit(1);
-	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*) * fdf->full->hei));
+	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
+					* fdf->full->hei));
 	i = 0;
 	while (i < fdf->full->hei)
 	{
 		if (get_next_line(fd, &line) < 0)
-			print_error("gnl err");
+			print_error("Error reading map");
 		check_malloc(tmp = ft_strsplit(line, ' '));
-		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double) * fdf->full->wid));
+		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
+					* fdf->full->wid));
 		j = 0;
 		while (j < fdf->full->wid)
 		{
@@ -69,27 +65,7 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 	}
 }
 
-// void	normalize_z(t_fdf *fdf)
-// {
-// 	int i;
-// 	int j;
-// 	double	mn;
-// 	double	mx;
-
-// 	mn = fdf->map[0][0].z;
-// 	mx = fdf->map[0][0].z;
-// 	i = 0;
-// 	while (i < fdf->full->hei)
-// 	{
-// 		j = 0;
-// 		while (j < fdf->full->wid)
-// 		{
-// 			mn = fdf->map[i][j].z < mn ? fdf->map[i][j].z : mn;
-// 			mx = fdf->map[i][j].y
-// 		}
-// 	}
-// }
-double	get_max_z(double **zarr, int hei, int wid)
+double			get_max_z(double **zarr, int hei, int wid)
 {
 	double	ret;
 	double	mn;
@@ -111,12 +87,12 @@ double	get_max_z(double **zarr, int hei, int wid)
 		}
 		i++;
 	}
-	mx = fabs(mx) / 4;
-	mn = fabs(mn) / 4;
+	mx = fabs(mx) / 3.0 * 2.0;
+	mn = fabs(mn) / 3.0 * 2.0;
 	return (mx > mn ? mx : mn);
 }
 
-void	normalize_z(t_fdf *fdf)
+void			normalize_z(t_fdf *fdf)
 {
 	int		i;
 	int		j;
@@ -138,17 +114,18 @@ void	normalize_z(t_fdf *fdf)
 	}
 }
 
-
 void			init_3dmap(t_fdf *fdf)
 {
 	int		i;
 	int		j;
 
-	check_malloc(fdf->map = (t_3dmap**)malloc(sizeof(t_3dmap*) * fdf->full->hei));
+	check_malloc(fdf->map = (t_3dmap**)malloc(sizeof(t_3dmap*)
+												* fdf->full->hei));
 	i = 0;
 	while (i < fdf->full->hei)
 	{
-		check_malloc(fdf->map[i] = (t_3dmap*)malloc(sizeof(t_3dmap) * fdf->full->wid));
+		check_malloc(fdf->map[i] = (t_3dmap*)malloc(sizeof(t_3dmap)
+												* fdf->full->wid));
 		i++;
 	}
 	i = 0;
@@ -157,8 +134,8 @@ void			init_3dmap(t_fdf *fdf)
 		j = 0;
 		while (j < fdf->full->wid)
 		{
-			fdf->map[i][j].x = (double)(j - fdf->full->y_err); // i - 
-			fdf->map[i][j].y = (double)(i - fdf->full->x_err); // j - 
+			fdf->map[i][j].x = (double)(j - fdf->full->y_err);
+			fdf->map[i][j].y = (double)(i - fdf->full->x_err);
 			fdf->map[i][j].z = fdf->zarr[i][j] * fdf->h_zarr;
 			j++;
 		}

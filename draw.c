@@ -80,52 +80,14 @@ static void		draw_lines(t_fdf *fdf, t_3dmap map1, t_3dmap map2)
 	int		color;
 
 	cr1.x = (int)map1.x;
-	cr1.y = (int)map1.y;
+	cr1.y = fdf->proj == PARALLEL ? (int)map1.z : (int)map1.y;
 	cr2.x = (int)map2.x;
-	cr2.y = (int)map2.y;
-	color = 0xEE82EE;
+	cr2.y = fdf->proj == PARALLEL ? (int)map2.z : (int)map2.y;
+	color = 0xB266FF;//get_color(fdf->color, abs(cr2.x - cr1.x) > abs(cr1.y - cr2.y), cr1, cr2);
 	draw_line(fdf->full, cr1, cr2, color);
 }
 
-// void			draw(t_fdf *fdf, t_proj proj)
-// {
-// 	int		i;
-// 	int		j;
-// 	t_3dmap	now;
-// 	t_3dmap	next;
-
-// 	rotate(fdf);
-// 	i = 0;
-// 	fdf->r = 0.5;
-// 	while (i < fdf->full->hei)
-// 	{
-// 		j = 0;
-// 		while (j < fdf->full->wid)
-// 		{
-// 			now = fdf->map[i][j];
-// 			proj == ISO ? set_iso_coords(&now, fdf->siz, fdf->h_zarr) :
-// 							matrix(&now, fdf->r, fdf->siz);
-// 			if (j < fdf->full->wid - 1)
-// 			{
-// 				next = fdf->map[i][j + 1];
-// 				proj == ISO ? set_iso_coords(&next, fdf->siz, fdf->h_zarr) : 
-// 							matrix(&next, fdf->r, fdf->siz);
-// 				draw_lines(fdf, now, next);
-// 			}
-// 			if (i < fdf->full->hei - 1)
-// 			{
-// 				next = fdf->map[i + 1][j];
-// 				proj == ISO ? set_iso_coords(&next, fdf->siz, fdf->h_zarr) : 
-// 								matrix(&next, fdf->r, fdf->siz);
-// 				draw_lines(fdf, now, next);
-// 			}
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
-
-void			draw(t_fdf *fdf)
+void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val, double val2))
 {
 	int		i;
 	int		j;
@@ -133,28 +95,26 @@ void			draw(t_fdf *fdf)
 	t_3dmap	next;
 
 	rotate(fdf);
-	i = 0;
-	while (i < fdf->full->hei)
+	i = -1;
+	while (++i < fdf->full->hei)
 	{
-		j = 0;
-		while (j < fdf->full->wid)
+		j = -1;
+		while (++j < fdf->full->wid)
 		{
 			now = fdf->map[i][j];
-			set_iso_coords(&now, fdf->siz, fdf->h_zarr);
+			projection(&now, fdf->r, fdf->siz);
 			if (j < fdf->full->wid - 1)
 			{
 				next = fdf->map[i][j + 1];
-				set_iso_coords(&next, fdf->siz, fdf->h_zarr);
+				projection(&next, fdf->r, fdf->siz);
 				draw_lines(fdf, now, next);
 			}
 			if (i < fdf->full->hei - 1)
 			{
 				next = fdf->map[i + 1][j];
-				set_iso_coords(&next, fdf->siz, fdf->h_zarr);
+				projection(&next, fdf->r, fdf->siz);
 				draw_lines(fdf, now, next);
 			}
-			j++;
 		}
-		i++;
 	}
 }

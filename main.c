@@ -1,6 +1,6 @@
 #include "head.h"
 
-void		check_malloc(void	*data)
+void		check_malloc(void *data)
 {
 	if (!data)
 	{
@@ -9,7 +9,6 @@ void		check_malloc(void	*data)
 	}
 }
 
-//void		init_mouse(t_mouse *ms, t_map *map)
 void		init_mouse_keys(t_fdf *fdf)
 {
 	fdf->ms.left = 0;
@@ -36,9 +35,11 @@ static void	set_off(t_fdf *fdf)
 	fdf->ang.a_z = 0.0;
 	fdf->full->x_err = fdf->full->hei / 2;
 	fdf->full->y_err = fdf->full->wid / 2;
+	fdf->color.start = 0x7F00FF;
+	fdf->color.end = 0xFFFF33;
 }
 
-void	print_error(char *str)
+void		print_error(char *str)
 {
 	fprintf(stderr, "%s\n", str);
 	exit(1);
@@ -53,20 +54,18 @@ t_fdf		*init_fdf(char *filename)
 	check_malloc(fdf->full = (t_map*)malloc(sizeof(t_map)));
 	fdf->full->wid = 0;
 	fdf->full->hei = 0;
-	fdf->flag_iso = 0;
 	fdf->zarr = NULL;
 	fdf->map = NULL;
 	if ((fd = open(filename, O_RDONLY)) < 0)
-		exit (1);
+		print_error("Error open file");
 	read_map(fdf, fd);
 	init_zarr(fdf, fd, filename);
 	normalize_z(fdf);
 	set_off(fdf);
 	init_3dmap(fdf);
 	init_mouse_keys(fdf);
-	//init_mouse(&fdf->ms, fdf->full);
 	fdf->full->mlx = mlx_init();
-	fdf->full->win = mlx_new_window(fdf->full->mlx, HEI, WID, "1000x1000");
+	fdf->full->win = mlx_new_window(fdf->full->mlx, HEI, WID, "FdF");
 	return (fdf);
 }
 
@@ -85,12 +84,9 @@ int			main(int argc, char **argv)
 
 	fdf = NULL;
 	if (argc != 2)
-	{
-		fprintf(stderr, "usage\n");
-		exit(1);
-	}
+		print_error("USAGE");
 	fdf = init_fdf(argv[1]);
-	draw(fdf);
+	draw(fdf, fdf->proj == PARALLEL ? matrix : set_iso_coords);
 	apply_hooks(fdf);
 	mlx_loop(fdf->full->mlx);
 	return (0);
