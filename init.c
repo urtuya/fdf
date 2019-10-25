@@ -29,6 +29,7 @@ void			read_map(t_fdf *fdf, int fd)
 	while (get_next_line(fd, &line) > 0)
 	{
 		check_valid(fdf, line);
+		ft_strdel(&line);
 		hei_count++;
 	}
 	fdf->full->hei = hei_count;
@@ -65,6 +66,16 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 	}
 }
 
+double			check_for_xy(double	val, t_map *map)
+{
+	double	coef;
+
+	coef = map->hei > map->wid ? map->hei : map->wid;
+	if (coef <= 2.8)
+		return (val / 3.0 * 2.0);
+	return (val);
+}
+
 double			get_max_z(double **zarr, int hei, int wid)
 {
 	double	ret;
@@ -89,7 +100,8 @@ double			get_max_z(double **zarr, int hei, int wid)
 	}
 	mx = fabs(mx) / 3.0 * 2.0;
 	mn = fabs(mn) / 3.0 * 2.0;
-	return (mx > mn ? mx : mn);
+	ret = mx > mn ? mx : mn;
+	return (ret);
 }
 
 void			normalize_z(t_fdf *fdf)
@@ -99,6 +111,7 @@ void			normalize_z(t_fdf *fdf)
 	double	zdivisor;
 
 	zdivisor = get_max_z(fdf->zarr, fdf->full->hei, fdf->full->wid);
+	// zdivisor = check_for_xy(zdivisor, fdf->full);
 	if (!zdivisor)
 		return ;
 	i = 0;
@@ -114,31 +127,41 @@ void			normalize_z(t_fdf *fdf)
 	}
 }
 
+double			get_coef(int hei, int wid)
+{
+	double	coef;
+
+	coef = hei > wid ? hei / wid : wid / hei;
+	if (coef < 2.1)
+		coef = 3.1;
+	else
+		coef = 5.1;
+	return (coef);
+}
+
 void			init_3dmap(t_fdf *fdf)
 {
 	int		i;
 	int		j;
+	double	coef;
 
-	check_malloc(fdf->map = (t_3dmap**)malloc(sizeof(t_3dmap*)
+	coef = get_coef(fdf->full->hei, fdf->full->wid);
+	check_malloc(fdf->map = (t_3dmap**)malloc(sizeof(t_3dmap*)\
 												* fdf->full->hei));
-	i = 0;
-	while (i < fdf->full->hei)
-	{
-		check_malloc(fdf->map[i] = (t_3dmap*)malloc(sizeof(t_3dmap)
+	i = -1;
+	while (++i < fdf->full->hei)
+		check_malloc(fdf->map[i] = (t_3dmap*)malloc(sizeof(t_3dmap)\
 												* fdf->full->wid));
-		i++;
-	}
-	i = 0;
-	while (i < fdf->full->hei)
+	i = -1;
+	while (++i < fdf->full->hei)
 	{
-		j = 0;
-		while (j < fdf->full->wid)
+		j = -1;
+		while (++j < fdf->full->wid)
 		{
 			fdf->map[i][j].x = (double)(j - fdf->full->y_err);
 			fdf->map[i][j].y = (double)(i - fdf->full->x_err);
 			fdf->map[i][j].z = fdf->zarr[i][j] * fdf->h_zarr;
-			j++;
+			fdf->map[i][j].coef = coef;
 		}
-		i++;
 	}
 }

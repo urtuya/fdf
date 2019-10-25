@@ -1,12 +1,10 @@
 #include "head.h"
 
-void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
+void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, t_color color)
 {
 	t_line ln;
 	int dx1;
 	int dy1;
-	int xe;
-	int ye;
 
 	ln.dx = cr2.x - cr1.x;
 	ln.dy = cr2.y - cr1.y;
@@ -16,20 +14,21 @@ void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
 	ln.sy = 2.0 * dx1 - dy1;
 	if (dy1 <= dx1)
 	{
+		ln.xs = cr2.x;
 		ln.x = cr2.x;
 		ln.y = cr2.y;
-		xe = cr1.x;
+		ln.xe = cr1.x;
 		if (ln.dx >= 0)
 		{
+			ln.xs = cr1.x;
 			ln.x = cr1.x;
 			ln.y = cr1.y;
-			xe = cr2.x;
+			ln.xe = cr2.x;
 		}
-		while (ln.x < xe)
+		while (ln.x < ln.xe)
 		{
-			if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > 1000))
-				mlx_pixel_put(fdf->mlx, fdf->win, ln.x + fdf->offx, ln.y + fdf->offy, color);
-
+			if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > WID))
+				mlx_pixel_put(fdf->mlx, fdf->win, ln.x + fdf->offx, ln.y + fdf->offy, get_color(&color, ln));
 			ln.x++;
 			if (ln.sx < 0)
 				ln.sx += 2 * dy1;
@@ -45,19 +44,21 @@ void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
 	}
 	else
 	{
+		ln.ys = cr2.y;
 		ln.x = cr2.x;
 		ln.y = cr2.y;
-		ye = cr1.y;
+		ln.ye = cr1.y;
 		if (ln.dy >= 0)
 		{
+			ln.ys = cr1.y;
 			ln.x = cr1.x;
 			ln.y = cr1.y;
-			ye = cr2.y;
+			ln.ye = cr2.y;
 		}
-		while (ln.y < ye)
+		while (ln.y < ln.ye)
 		{
-			if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > 1000))
-				mlx_pixel_put(fdf->mlx, fdf->win, ln.x + fdf->offx, ln.y + fdf->offy, color);
+			if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > WID))
+				mlx_pixel_put(fdf->mlx, fdf->win, ln.x + fdf->offx, ln.y + fdf->offy, get_color(&color, ln));
 			ln.y++;
 			if (ln.sy <= 0)
 				ln.sy += 2 * dx1;
@@ -84,7 +85,7 @@ static void		draw_lines(t_fdf *fdf, t_3dmap map1, t_3dmap map2)
 	cr2.x = (int)map2.x;
 	cr2.y = fdf->proj == PARALLEL ? (int)map2.z : (int)map2.y;
 	color = 0xB266FF;//get_color(fdf->color, abs(cr2.x - cr1.x) > abs(cr1.y - cr2.y), cr1, cr2);
-	draw_line(fdf->full, cr1, cr2, color);
+	draw_line(fdf->full, cr1, cr2, fdf->color);
 }
 
 void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val, double val2))
@@ -107,12 +108,16 @@ void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val, double val2
 			{
 				next = fdf->map[i][j + 1];
 				projection(&next, fdf->r, fdf->siz);
+							// if (fdf->map[i][j].y == 0.0)
+				// printf("x = %f y = %f z = %f\n", fdf->map[i][j].x, fdf->map[i][j].y, fdf->map[i][j].z);
 				draw_lines(fdf, now, next);
 			}
 			if (i < fdf->full->hei - 1)
 			{
 				next = fdf->map[i + 1][j];
 				projection(&next, fdf->r, fdf->siz);
+							// if (fdf->map[i][j].y == 0.0)
+				// printf("x = %f y = %f z = %f\n", fdf->map[i][j].x, fdf->map[i][j].y, fdf->map[i][j].z);
 				draw_lines(fdf, now, next);
 			}
 		}

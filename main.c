@@ -24,18 +24,19 @@ static void	set_off(t_fdf *fdf)
 	double	b;
 
 	fdf->h_zarr = 1.0;
-	fdf->siz = 0;
+	fdf->siz = 1.0;
 	fdf->full->offx = HEI / 2;
 	fdf->full->offy = WID / 2;
 	a = WID / fdf->full->wid / 2;
 	b = HEI / fdf->full->hei / 2;
 	fdf->siz = a < b ? a : b; 
+	fdf->siz = !fdf->siz ? 1 : fdf->siz;
 	fdf->ang.a_x = 0.0;
 	fdf->ang.a_y = 0.0;
 	fdf->ang.a_z = 0.0;
 	fdf->full->x_err = fdf->full->hei / 2;
 	fdf->full->y_err = fdf->full->wid / 2;
-	fdf->color.start = 0x7F00FF;
+	fdf->color.start = 0xFF33FF;
 	fdf->color.end = 0xFFFF33;
 }
 

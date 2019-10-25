@@ -2,28 +2,8 @@
 
 int		key_press(int keykode, t_fdf *fdf)
 {
-	if (keykode == 4)
-		fdf->key.h_key = 0;
-	if (keykode == 19)
-	{
-		// mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		// clean_main_map(fdf);
-		// fdf->ang.a_x = 30;
-		// draw2(fdf);
-		fdf->key.proj = 1;
-	}
-	fdf->key.anykey_ispressed = fdf->key.h_key != 0 ? 1 : 0;
-	return (0);
-}
-
-int		key_release(int keykode, t_fdf *fdf)
-{
-	t_proj	proj;
-
-	if (keykode == 4)
-	{
-		fdf->key.h_key = 1;
-	}
+	if (keykode != 19 && keykode != 18 && keykode != 27 && keykode != 24)
+		return (0);
 	if (keykode == 19)
 	{
 		fdf->key.proj = 1;
@@ -31,34 +11,50 @@ int		key_release(int keykode, t_fdf *fdf)
 		fdf->ang.a_x = 120.0;
 		fdf->ang.a_y = 0.0;
 		fdf->ang.a_z = 0.0;
+		fdf->h_zarr = 1.0;
 		clean_main_map(fdf);
 		find_min_max(fdf);
-		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw(fdf, fdf->proj ? matrix : set_iso_coords);
 	}
-	fdf->key.anykey_ispressed = fdf->key.h_key != 0 ? 1 : 0;
+	else if (keykode == 18)
+	{
+		fdf->ang.a_x = 0.0;
+		fdf->ang.a_y = 0.0;
+		fdf->ang.a_z = 0.0;
+		clean_main_map(fdf);
+		fdf->key.proj = ISO;
+	}
+	else if ((keykode == 27 || keykode == 24))
+	{
+		fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
+		fdf->ang.a_y = 0.0;
+		fdf->ang.a_z = 0.0;
+		fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
+		if (fdf->h_zarr > 8.0)
+			fdf->h_zarr = 8.0;
+		clean_main_map(fdf);
+	}
+	mlx_clear_window(fdf->full->mlx, fdf->full->win);
+	draw(fdf, fdf->proj ? matrix : set_iso_coords);
+	return (0);
+}
+
+int		key_release(int keykode, t_fdf *fdf)
+{
+	t_proj	proj;
+
 	return (0);
 }
 
 int		mouse_press(int btn, int x, int y, t_fdf *fdf)
 {
-	t_proj		proj;
-
 	if (x < 0 || x > HEI || y < 0 || y > WID)
 		return (1);
 	fdf->ang.a_x = 0.0;
 	fdf->ang.a_y = 0.0;
 	fdf->ang.a_z = 0.0;
-	proj = fdf->key.proj == 1 ? PARALLEL : ISO;
 	if (btn == 1)
 		fdf->ms.left = 1;
-	else if (fdf->key.h_key && (btn == 4 || btn == 5))
-	{
-		fdf->h_zarr *= btn == 4 ? 1.1 : 0.9;
-		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw(fdf, fdf->proj ? matrix : set_iso_coords);
-	}
-	else if (!fdf->key.anykey_ispressed && (btn == 4 || btn == 5))
+	else if ((btn == 4 || btn == 5))
 	{
 		fdf->siz *= btn == 4 ? 1.1 : 0.9;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);

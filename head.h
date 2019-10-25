@@ -9,8 +9,8 @@
 # include <math.h>
 # include <stdio.h>
 
-# define HEI 1000
-# define WID 1000
+# define HEI 1400
+# define WID 1200
 
 typedef enum	e_projection
 {
@@ -31,6 +31,7 @@ typedef struct	s_key
 	int	h_key;
 	int	anykey_ispressed;
 	int	proj;
+	int	h_pressed;
 }				t_key;
 
 typedef struct	s_perspective
@@ -64,6 +65,7 @@ typedef struct	s_3dmap
 	double	x;
 	double	y;
 	double	z;
+	double	coef;
 }				t_3dmap;
 
 typedef struct	s_angle
@@ -89,7 +91,7 @@ typedef struct	s_fdf
 	t_mouse ms;
 	t_key	key;
 	t_proj	proj;
-	t_color	color;
+	t_color color;
 
 	double	last_r;
 	double	r;
@@ -108,6 +110,10 @@ typedef struct	s_line
 	int		y;
 	int		sy;
 	int		sx;
+	int		xs;
+	int		ys;
+	int		xe;
+	int		ye;
 }				t_line;
 
 //main.c
