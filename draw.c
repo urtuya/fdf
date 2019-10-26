@@ -12,6 +12,7 @@ void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, t_color color)
 	dy1 = abs(ln.dy);
 	ln.sx = 2.0 * dy1 - dx1;
 	ln.sy = 2.0 * dx1 - dy1;
+	color.curr = color.start;
 	if (dy1 <= dx1)
 	{
 		ln.xs = cr2.x;
@@ -27,8 +28,10 @@ void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, t_color color)
 		}
 		while (ln.x < ln.xe)
 		{
+			
 			if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > WID))
 				mlx_pixel_put(fdf->mlx, fdf->win, ln.x + fdf->offx, ln.y + fdf->offy, get_color(&color, ln));
+			// color.curr = get_color(&color, ln);
 			ln.x++;
 			if (ln.sx < 0)
 				ln.sx += 2 * dy1;
@@ -57,8 +60,10 @@ void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, t_color color)
 		}
 		while (ln.y < ln.ye)
 		{
+			
 			if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > WID))
 				mlx_pixel_put(fdf->mlx, fdf->win, ln.x + fdf->offx, ln.y + fdf->offy, get_color(&color, ln));
+			// color.curr = get_color(&color, ln);
 			ln.y++;
 			if (ln.sy <= 0)
 				ln.sy += 2 * dx1;
@@ -78,13 +83,14 @@ static void		draw_lines(t_fdf *fdf, t_3dmap map1, t_3dmap map2)
 {
 	t_coor	cr1;
 	t_coor	cr2;
-	int		color;
 
 	cr1.x = (int)map1.x;
 	cr1.y = fdf->proj == PARALLEL ? (int)map1.z : (int)map1.y;
 	cr2.x = (int)map2.x;
 	cr2.y = fdf->proj == PARALLEL ? (int)map2.z : (int)map2.y;
-	color = 0xB266FF;//get_color(fdf->color, abs(cr2.x - cr1.x) > abs(cr1.y - cr2.y), cr1, cr2);
+	printf("COLOR: %d\n", fdf->color.start < fdf->color.end);
+	// exit(0);
+	// fdf->color.curr = 0xB266FF;//get_color(fdf->color, abs(cr2.x - cr1.x) > abs(cr1.y - cr2.y), cr1, cr2);
 	draw_line(fdf->full, cr1, cr2, fdf->color);
 }
 

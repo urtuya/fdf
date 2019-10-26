@@ -6,8 +6,9 @@ int		key_press(int keykode, t_fdf *fdf)
 		return (0);
 	if (keykode == 19)
 	{
-		fdf->key.proj = 1;
+		// fdf->key.proj = 1;
 		fdf->proj = PARALLEL;
+		fdf->siz = fdf->prev_siz * 2.1;
 		fdf->ang.a_x = 120.0;
 		fdf->ang.a_y = 0.0;
 		fdf->ang.a_z = 0.0;
@@ -17,11 +18,12 @@ int		key_press(int keykode, t_fdf *fdf)
 	}
 	else if (keykode == 18)
 	{
+		fdf->proj = ISO;
+		fdf->siz = fdf->prev_siz;
 		fdf->ang.a_x = 0.0;
 		fdf->ang.a_y = 0.0;
 		fdf->ang.a_z = 0.0;
 		clean_main_map(fdf);
-		fdf->key.proj = ISO;
 	}
 	else if ((keykode == 27 || keykode == 24))
 	{
@@ -29,11 +31,14 @@ int		key_press(int keykode, t_fdf *fdf)
 		fdf->ang.a_y = 0.0;
 		fdf->ang.a_z = 0.0;
 		fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
-		if (fdf->h_zarr > 8.0)
+		if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
 			fdf->h_zarr = 8.0;
+		else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
+			fdf->h_zarr = 5.0;
 		clean_main_map(fdf);
 	}
 	mlx_clear_window(fdf->full->mlx, fdf->full->win);
+	// printf("PROJECTION = %d\n", ISO);
 	draw(fdf, fdf->proj ? matrix : set_iso_coords);
 	return (0);
 }
@@ -74,11 +79,9 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 {
 	int	prev_x;
 	int	prev_y;
-	t_proj proj;
 
 	if (x < 0 || x > HEI || y < 0 || y > WID)
 		return (1);
-	proj = fdf->key.proj == 1 ? PARALLEL : ISO;
 	prev_x = fdf->ms.x;
 	prev_y = fdf->ms.y;
 	fdf->ms.x = x;
@@ -89,7 +92,7 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 		fdf->ang.a_x = (double)(x - prev_x) * 0.2;
 		fdf->ang.a_z = (double)((x - prev_x) / 2 + (y - prev_y) / 2) * 0.2;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
-		draw(fdf, proj ? matrix : set_iso_coords);
+		draw(fdf, fdf->proj ? matrix : set_iso_coords);
 	}
 	return (0);
 }

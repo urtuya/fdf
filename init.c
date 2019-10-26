@@ -47,22 +47,19 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 		exit(1);
 	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
 					* fdf->full->hei));
-	i = 0;
-	while (i < fdf->full->hei)
+	i = -1;
+	while (++i < fdf->full->hei)
 	{
 		if (get_next_line(fd, &line) < 0)
 			print_error("Error reading map");
 		check_malloc(tmp = ft_strsplit(line, ' '));
 		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
 					* fdf->full->wid));
-		j = 0;
-		while (j < fdf->full->wid)
-		{
+		j = -1;
+		while (++j < fdf->full->wid)
 			fdf->zarr[i][j] = (double)ft_atoi(tmp[j]);
-			j++;
-		}
+		ft_strdel(&line);
 		ft_freesplit(tmp);
-		i++;
 	}
 }
 
@@ -127,14 +124,14 @@ void			normalize_z(t_fdf *fdf)
 	}
 }
 
-double			get_coef(int hei, int wid)
+static double	get_coef(int hei, int wid)
 {
 	double	coef;
 
 	coef = hei > wid ? hei / wid : wid / hei;
 	if (coef < 2.1)
 		coef = 3.1;
-	else
+	else if (coef <= 5.1)
 		coef = 5.1;
 	return (coef);
 }

@@ -37,8 +37,4 @@ void	matrix(t_3dmap *map, double r, double siz)
 	map->x *= siz;
 	map->y *= siz;
 	map->z *= siz;
-	// printf("x = %f y = %f y = %f\n", map->x, map->y, map->z);
-	// if (map->x > 2000.0 || map->x <= -2000.0 || map->y > 2000.0 || map->y <= 2000.0)
-	// 	printf("z = %f r = %f\n", map->y, r);
-	// printf("x = %f y = %f z = %f\n", map->x, map->y, map->z);
 }

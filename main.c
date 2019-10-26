@@ -1,12 +1,15 @@
 #include "head.h"
 
+void		print_error(char *str)
+{
+	fprintf(stderr, "%s\n", str);
+	exit(1);
+}
+
 void		check_malloc(void *data)
 {
 	if (!data)
-	{
-		fprintf(stderr, "malloc error\n");
-		exit (1);
-	}
+		print_error("malloc error");
 }
 
 void		init_mouse_keys(t_fdf *fdf)
@@ -31,6 +34,7 @@ static void	set_off(t_fdf *fdf)
 	b = HEI / fdf->full->hei / 2;
 	fdf->siz = a < b ? a : b; 
 	fdf->siz = !fdf->siz ? 1 : fdf->siz;
+	fdf->prev_siz = fdf->siz;
 	fdf->ang.a_x = 0.0;
 	fdf->ang.a_y = 0.0;
 	fdf->ang.a_z = 0.0;
@@ -38,12 +42,6 @@ static void	set_off(t_fdf *fdf)
 	fdf->full->y_err = fdf->full->wid / 2;
 	fdf->color.start = 0xFF33FF;
 	fdf->color.end = 0xFFFF33;
-}
-
-void		print_error(char *str)
-{
-	fprintf(stderr, "%s\n", str);
-	exit(1);
 }
 
 t_fdf		*init_fdf(char *filename)

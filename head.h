@@ -30,7 +30,6 @@ typedef struct	s_key
 {
 	int	h_key;
 	int	anykey_ispressed;
-	int	proj;
 	int	h_pressed;
 }				t_key;
 
@@ -43,8 +42,8 @@ typedef struct	s_perspective
 
 typedef struct	s_coordinates
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 }				t_coor;
 
 typedef struct	s_map
@@ -96,6 +95,7 @@ typedef struct	s_fdf
 	double	last_r;
 	double	r;
 	double	h_zarr;
+	double	prev_siz;
 	double	siz;
 	int		offx;
 	int		offy;
@@ -114,15 +114,19 @@ typedef struct	s_line
 	int		ys;
 	int		xe;
 	int		ye;
+	int		dx1;
+	int		dy1;
 }				t_line;
 
 //main.c
 void			check_malloc(void	*data);
+void			print_error(char *str);
 
 //init.c
 void			init_zarr(t_fdf *fdf, int fd, char *filename);
 void			read_map(t_fdf *fdf, int fd);
 void			init_3dmap(t_fdf *fdf);
+void			normalize_z(t_fdf *fdf);
 
 //draw.c
 void			draw(t_fdf *fdf, void (*projection)(t_3dmap*, double, double));
@@ -141,6 +145,7 @@ int				key_press(int keykode, t_fdf *fdf);
 
 //perspective.c
 void			matrix(t_3dmap *map, double r, double siz);
+void			find_min_max(t_fdf *fdf);
 
 //rotaton.c
 void			rotate(t_fdf *fdf);
