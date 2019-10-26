@@ -44,6 +44,7 @@ typedef struct	s_coordinates
 {
 	int		x;
 	int		y;
+	int		z;
 }				t_coor;
 
 typedef struct	s_map
@@ -64,6 +65,7 @@ typedef struct	s_3dmap
 	double	x;
 	double	y;
 	double	z;
+	int		z_val;
 	double	coef;
 }				t_3dmap;
 
@@ -79,11 +81,15 @@ typedef struct	s_color
 	int		start;
 	int		end;
 	int		curr;
+	int		z_max;
+	int		z_min;
+	int		distance;
 }				t_color;
 
 typedef struct	s_fdf
 {
 	t_map	*full;
+	int		**static_z;
 	double	**zarr;
 	t_3dmap	**map;
 	t_angle	ang;
@@ -116,6 +122,8 @@ typedef struct	s_line
 	int		ye;
 	int		dx1;
 	int		dy1;
+	int		z1;
+	int		z2;
 }				t_line;
 
 //main.c
@@ -150,4 +158,7 @@ void			find_min_max(t_fdf *fdf);
 //rotaton.c
 void			rotate(t_fdf *fdf);
 
+
+//color.c
+int		get_color(t_color *color, t_line ln);
 #endif
