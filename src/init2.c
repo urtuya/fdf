@@ -6,7 +6,7 @@
 /*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:52:35 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 16:11:39 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:22:06 by oargrave         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void			drawing_height(int keykode, t_fdf *fdf)
 {
 	fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
 	fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
-	if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
-		fdf->h_zarr = 8.0;
+	if (fdf->h_zarr > 7.0 && fdf->proj == ISO)
+		fdf->h_zarr = 7.0;
 	else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
 		fdf->h_zarr = 5.0;
 	clean_main_map(fdf);
