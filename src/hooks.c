@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vellery- <vellery-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:51:52 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 16:15:12 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:49:51 by vellery-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		key_press(int keykode, t_fdf *fdf)
 	fdf->ang.a_y = 0.0;
 	fdf->ang.a_z = 0.0;
 	if (keykode == 19)
-		parallel_projection(keykode, fdf);
+		parallel_projection(fdf);
 	else if (keykode == 18)
 	{
 		fdf->proj = ISO;
@@ -35,6 +35,7 @@ int		key_press(int keykode, t_fdf *fdf)
 	if (keykode == 20 || keykode == 6)
 		color_rendering(keykode, fdf);
 	mlx_clear_window(fdf->full->mlx, fdf->full->win);
+	print_help(fdf->full);
 	draw(fdf, fdf->proj ? matrix : set_iso_coords);
 	return (0);
 }
@@ -69,12 +70,15 @@ int		mouse_press(int btn, int x, int y, t_fdf *fdf)
 		fdf->siz *= btn == 4 ? 1.1 : 0.9;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
 		draw(fdf, fdf->proj ? matrix : set_iso_coords);
+		print_help(fdf->full);
 	}
 	return (0);
 }
 
 int		mouse_release(int btn, int x, int y, t_fdf *fdf)
 {
+	(void)x;
+	(void)y;
 	if (btn == 1)
 		fdf->ms.left = 0;
 	return (0);
@@ -98,6 +102,7 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 		fdf->ang.a_z = (double)((x - prev_x) / 2 + (y - prev_y) / 2) * 0.2;
 		mlx_clear_window(fdf->full->mlx, fdf->full->win);
 		draw(fdf, fdf->proj ? matrix : set_iso_coords);
+		print_help(fdf->full);
 	}
 	return (0);
 }

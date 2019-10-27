@@ -17,8 +17,6 @@ void		init_mouse_keys(t_fdf *fdf)
 	fdf->ms.left = 0;
 	fdf->ms.x = 0;
 	fdf->ms.y = 0;
-	fdf->key.h_key = 0;
-	fdf->key.anykey_ispressed = 0;
 }
 
 static void	set_off(t_fdf *fdf)
@@ -69,6 +67,7 @@ t_fdf		*init_fdf(char *filename)
 
 void		apply_hooks(t_fdf *fdf)
 {
+	print_help(fdf->full);
 	mlx_hook(fdf->full->win, 4, 0, mouse_press, fdf);
 	mlx_hook(fdf->full->win, 5, 0, mouse_release, fdf);
 	mlx_hook(fdf->full->win, 6, 0, mouse_move, fdf);
@@ -81,7 +80,7 @@ int			main(int argc, char **argv)
 
 	fdf = NULL;
 	if (argc != 2)
-		print_error("USAGE");
+		print_error("Usage: ./fdf [file]");
 	fdf = init_fdf(argv[1]);
 	draw(fdf, fdf->proj == PARALLEL ? matrix : set_iso_coords);
 	apply_hooks(fdf);

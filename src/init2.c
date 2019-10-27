@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vellery- <vellery-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:52:35 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 16:22:06 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 19:50:14 by vellery-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 static void		check_valid(t_fdf *fdf, char *line)
 {
 	int		i;
-	int		wid_count;
 	char	**tmp;
-	int		j;
 
 	if (!line || !*line)
 		print_error("Error while reading map");
@@ -27,7 +25,7 @@ static void		check_valid(t_fdf *fdf, char *line)
 		i++;
 	if (!fdf->full->wid)
 		fdf->full->wid = i;
-	else if (fdf->full->wid != i || fdf->full->wid < 2)
+	else if (fdf->full->wid != i)
 		print_error("map error");
 	ft_freesplit(tmp);
 }
@@ -55,7 +53,7 @@ void			read_map(t_fdf *fdf, int fd)
 ** hooks two
 */
 
-void			parallel_projection(int keykode, t_fdf *fdf)
+void			parallel_projection(t_fdf *fdf)
 {
 	fdf->proj = PARALLEL;
 	fdf->siz = fdf->prev_siz * 2.1;
