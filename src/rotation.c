@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   rotation.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 14:15:05 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 14:15:07 by oargrave         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "head.h"
 
 static double	degtorad(double deg)
@@ -52,8 +40,8 @@ static void		rot_z(t_3dmap *map, double angle)
 
 void			rotate(t_fdf *fdf)
 {
-	int		i;
-	int		j;
+    int		i;
+    int		j;
 
 	i = 0;
 	while (i < fdf->full->hei)

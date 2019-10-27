@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 14:14:59 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 14:15:07 by oargrave         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "head.h"
 
 void		print_error(char *str)
@@ -44,7 +32,7 @@ static void	set_off(t_fdf *fdf)
 	fdf->full->offy = WID / 2;
 	a = WID / fdf->full->wid / 2;
 	b = HEI / fdf->full->hei / 2;
-	fdf->siz = a < b ? a : b;
+	fdf->siz = a < b ? a : b; 
 	fdf->siz = !fdf->siz ? 1 : fdf->siz;
 	fdf->prev_siz = fdf->siz;
 	fdf->ang.a_x = 0.0;
@@ -85,6 +73,7 @@ void		apply_hooks(t_fdf *fdf)
 	mlx_hook(fdf->full->win, 5, 0, mouse_release, fdf);
 	mlx_hook(fdf->full->win, 6, 0, mouse_move, fdf);
 	mlx_hook(fdf->full->win, 2, 0, key_press, fdf);
+	mlx_hook(fdf->full->win, 3, 0, key_release, fdf);
 }
 
 int			main(int argc, char **argv)

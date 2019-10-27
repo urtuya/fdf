@@ -1,28 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 14:14:48 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 14:15:07 by oargrave         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "head.h"
 
 int		key_press(int keykode, t_fdf *fdf)
 {
-	if (keykode != 19 && keykode != 18 && keykode != 27 && keykode != 24)
+	if (keykode != 19 && keykode != 18 && keykode != 27 && keykode != 24 && keykode != 20 && keykode != 6 && keykode != 53)
 		return (0);
-	fdf->ang.a_y = 0.0;
-	fdf->ang.a_z = 0.0;
+	if (keykode == 53)
+		exit(0);
 	if (keykode == 19)
 	{
 		fdf->proj = PARALLEL;
 		fdf->siz = fdf->prev_siz * 2.1;
 		fdf->ang.a_x = 120.0;
+		fdf->ang.a_y = 0.0;
+		fdf->ang.a_z = 0.0;
 		fdf->h_zarr = 1.0;
 		clean_main_map(fdf);
 		find_min_max(fdf);
@@ -32,24 +22,49 @@ int		key_press(int keykode, t_fdf *fdf)
 		fdf->proj = ISO;
 		fdf->siz = fdf->prev_siz;
 		fdf->ang.a_x = 0.0;
+		fdf->ang.a_y = 0.0;
+		fdf->ang.a_z = 0.0;
 		clean_main_map(fdf);
 	}
 	else if ((keykode == 27 || keykode == 24))
-		height_adjustmen(fdf, keykode);
+	{
+		fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
+		fdf->ang.a_y = 0.0;
+		fdf->ang.a_z = 0.0;
+		fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
+		if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
+			fdf->h_zarr = 8.0;
+		else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
+			fdf->h_zarr = 5.0;
+		clean_main_map(fdf);
+	}
+	if (keykode == 20 || keykode == 6)
+	{
+		fdf->ang.a_x = 0.0;
+		fdf->ang.a_y = 0.0;
+		fdf->ang.a_z = 0.0;
+		if (keykode == 20)
+		{
+			if (fdf->color == 0x9933FF || fdf->color == 0x0000FF)
+				fdf->color = 0xFF0000;
+			else if (fdf->color == 0xFF0000)
+				fdf->color = 0x00FF00;
+			else if (fdf->color == 0x00FF00)
+				fdf->color = 0x0000FF;
+		}
+		if (keykode == 6)
+			fdf->color = 0x9933FF;
+	}
 	mlx_clear_window(fdf->full->mlx, fdf->full->win);
 	draw(fdf, fdf->proj ? matrix : set_iso_coords);
 	return (0);
 }
 
-void	height_adjustmen(t_fdf *fdf, int keykode)
+int		key_release(int keykode, t_fdf *fdf)
 {
-	fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
-	fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
-	if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
-		fdf->h_zarr = 8.0;
-	else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
-		fdf->h_zarr = 5.0;
-	clean_main_map(fdf);
+	t_proj	proj;
+
+	return (0);
 }
 
 int		mouse_press(int btn, int x, int y, t_fdf *fdf)
