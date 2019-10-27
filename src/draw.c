@@ -6,7 +6,7 @@
 /*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:47:32 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 16:12:01 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:20:25 by oargrave         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val,
 
 	rotate(fdf);
 	i = -1;
-	while (++i < fdf->full->hei)
-	{
-		j = -1;
+	while (++i < fdf->full->hei && (j = -1))
 		while (++j < fdf->full->wid)
 		{
 			now = fdf->map[i][j];
@@ -56,5 +54,4 @@ void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val,
 				draw_lines(fdf, now, next);
 			}
 		}
-	}
 }
