@@ -6,7 +6,7 @@
 /*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:54:47 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 15:55:16 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:02:05 by oargrave         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void		apply_hooks(t_fdf *fdf)
 	mlx_hook(fdf->full->win, 5, 0, mouse_release, fdf);
 	mlx_hook(fdf->full->win, 6, 0, mouse_move, fdf);
 	mlx_hook(fdf->full->win, 2, 0, key_press, fdf);
-	mlx_hook(fdf->full->win, 3, 0, key_release, fdf);
 }
 
 int			main(int argc, char **argv)

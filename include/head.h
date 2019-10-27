@@ -139,4 +139,6 @@ void			find_min_max(t_fdf *fdf);
 //rotaton.c
 void			rotate(t_fdf *fdf);
 
+void		color_rendering(int keykode, t_fdf *fdf);
+
 #endif
