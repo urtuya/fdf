@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/27 15:47:32 by oargrave          #+#    #+#             */
+/*   Updated: 2019/10/27 15:51:08 by oargrave         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "head.h"
 
 static void		draw_lines(t_fdf *fdf, t_3dmap map1, t_3dmap map2)
@@ -14,7 +26,8 @@ static void		draw_lines(t_fdf *fdf, t_3dmap map1, t_3dmap map2)
 	draw_line(fdf->full, cr1, cr2, color);
 }
 
-void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val, double val2))
+void			draw(t_fdf *fdf, void (*projection)(t_3dmap *map, double val,
+	double val2))
 {
 	int		i;
 	int		j;

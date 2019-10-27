@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/27 15:54:47 by oargrave          #+#    #+#             */
+/*   Updated: 2019/10/27 15:55:16 by oargrave         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "head.h"
 
 void		print_error(char *str)
@@ -33,7 +45,7 @@ static void	set_off(t_fdf *fdf)
 	fdf->full->offy = WID / 2;
 	a = WID / fdf->full->wid / 2;
 	b = HEI / fdf->full->hei / 2;
-	fdf->siz = a < b ? a : b; 
+	fdf->siz = a < b ? a : b;
 	fdf->siz = !fdf->siz ? 1 : fdf->siz;
 	fdf->prev_siz = fdf->siz;
 	fdf->ang.a_x = 0.0;

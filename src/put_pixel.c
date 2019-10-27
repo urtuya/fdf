@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   put_pixel.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/27 15:56:10 by oargrave          #+#    #+#             */
+/*   Updated: 2019/10/27 15:56:25 by oargrave         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "head.h"
 
 static void	init_line(t_line *ln, t_coor cr1, t_coor cr2)
@@ -78,9 +90,9 @@ static void	draw_y(t_line ln, t_map *fdf, int color)
 	}
 }
 
-void	draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
+void		draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
 {
-	t_line ln;
+	t_line		ln;
 
 	init_line(&ln, cr1, cr2);
 	if (ln.abs_dy <= ln.abs_dx)

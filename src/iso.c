@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   iso.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/27 15:53:46 by oargrave          #+#    #+#             */
+/*   Updated: 2019/10/27 15:54:30 by oargrave         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "head.h"
 
 void	set_iso_coords(t_3dmap *map, double h_zarr, double siz)
@@ -11,8 +23,6 @@ void	set_iso_coords(t_3dmap *map, double h_zarr, double siz)
 	map->x = ((prev_x - prev_y) * cos(0.523599)) * siz;
 	map->y = (-map->z + (prev_x + prev_y) * sin(0.523599)) * siz;
 }
-
-
 
 void	clean_main_map(t_fdf *fdf)
 {
