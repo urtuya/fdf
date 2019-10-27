@@ -6,24 +6,11 @@
 /*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:54:47 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 16:02:05 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:12:20 by oargrave         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "head.h"
-
-void		print_error(char *str)
-{
-	ft_putstr(str);
-	ft_putchar('\n');
-	exit(1);
-}
-
-void		check_malloc(void *data)
-{
-	if (!data)
-		print_error("malloc error");
-}
 
 void		init_mouse_keys(t_fdf *fdf)
 {

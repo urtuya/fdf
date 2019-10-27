@@ -6,7 +6,7 @@
 /*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 15:51:52 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 16:01:25 by oargrave         ###   ########.fr       */
+/*   Updated: 2019/10/27 16:15:12 by oargrave         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,7 @@ int		key_press(int keykode, t_fdf *fdf)
 	fdf->ang.a_y = 0.0;
 	fdf->ang.a_z = 0.0;
 	if (keykode == 19)
-	{
-		fdf->proj = PARALLEL;
-		fdf->siz = fdf->prev_siz * 2.1;
-		fdf->ang.a_x = 120.0;
-		fdf->h_zarr = 1.0;
-		clean_main_map(fdf);
-		find_min_max(fdf);
-	}
+		parallel_projection(keykode, fdf);
 	else if (keykode == 18)
 	{
 		fdf->proj = ISO;
@@ -38,15 +31,7 @@ int		key_press(int keykode, t_fdf *fdf)
 		clean_main_map(fdf);
 	}
 	else if ((keykode == 27 || keykode == 24))
-	{
-		fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
-		fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
-		if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
-			fdf->h_zarr = 8.0;
-		else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
-			fdf->h_zarr = 5.0;
-		clean_main_map(fdf);
-	}
+		drawing_height(keykode, fdf);
 	if (keykode == 20 || keykode == 6)
 		color_rendering(keykode, fdf);
 	mlx_clear_window(fdf->full->mlx, fdf->full->win);
@@ -54,20 +39,20 @@ int		key_press(int keykode, t_fdf *fdf)
 	return (0);
 }
 
-void		color_rendering(int keykode, t_fdf *fdf)
+void	color_rendering(int keykode, t_fdf *fdf)
 {
 	fdf->ang.a_x = 0.0;
-		if (keykode == 20)
-		{
-			if (fdf->color == 0x9933FF || fdf->color == 0x0000FF)
-				fdf->color = 0xFF0000;
-			else if (fdf->color == 0xFF0000)
-				fdf->color = 0x00FF00;
-			else if (fdf->color == 0x00FF00)
-				fdf->color = 0x0000FF;
-		}
-		if (keykode == 6)
-			fdf->color = 0x9933FF;
+	if (keykode == 20)
+	{
+		if (fdf->color == 0x9933FF || fdf->color == 0x0000FF)
+			fdf->color = 0xFF0000;
+		else if (fdf->color == 0xFF0000)
+			fdf->color = 0x00FF00;
+		else if (fdf->color == 0x00FF00)
+			fdf->color = 0x0000FF;
+	}
+	if (keykode == 6)
+		fdf->color = 0x9933FF;
 }
 
 int		mouse_press(int btn, int x, int y, t_fdf *fdf)
