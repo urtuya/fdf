@@ -2,11 +2,11 @@
 
 void	find_min_max(t_fdf *fdf)
 {
-	int i;
-	int j;
-	double	last_r;
-	double	mn;
-	double	mx;
+	int			i;
+	int			j;
+	double		last_r;
+	double		mn;
+	double		mx;
 
 	fdf->last_r = fdf->r;
 	mn = fdf->map[0][0].y;
@@ -30,7 +30,7 @@ void	matrix(t_3dmap *map, double r, double siz)
 {
 	if (r)
 	{
-		map->y = (map->y / r) + map->coef;//4.9;
+		map->y = (map->y / r) + map->coef;
 		map->x /= map->y;
 		map->z /= map->y;
 	}

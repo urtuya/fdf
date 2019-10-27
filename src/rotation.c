@@ -40,8 +40,8 @@ static void		rot_z(t_3dmap *map, double angle)
 
 void			rotate(t_fdf *fdf)
 {
-    int		i;
-    int		j;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (i < fdf->full->hei)

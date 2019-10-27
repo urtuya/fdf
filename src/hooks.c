@@ -4,14 +4,13 @@ int		key_press(int keykode, t_fdf *fdf)
 {
 	if (keykode != 19 && keykode != 18 && keykode != 27 && keykode != 24)
 		return (0);
+	fdf->ang.a_y = 0.0;
+	fdf->ang.a_z = 0.0;
 	if (keykode == 19)
 	{
-		// fdf->key.proj = 1;
 		fdf->proj = PARALLEL;
 		fdf->siz = fdf->prev_siz * 2.1;
 		fdf->ang.a_x = 120.0;
-		fdf->ang.a_y = 0.0;
-		fdf->ang.a_z = 0.0;
 		fdf->h_zarr = 1.0;
 		clean_main_map(fdf);
 		find_min_max(fdf);
@@ -21,33 +20,24 @@ int		key_press(int keykode, t_fdf *fdf)
 		fdf->proj = ISO;
 		fdf->siz = fdf->prev_siz;
 		fdf->ang.a_x = 0.0;
-		fdf->ang.a_y = 0.0;
-		fdf->ang.a_z = 0.0;
 		clean_main_map(fdf);
 	}
 	else if ((keykode == 27 || keykode == 24))
-	{
-		fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
-		fdf->ang.a_y = 0.0;
-		fdf->ang.a_z = 0.0;
-		fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
-		if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
-			fdf->h_zarr = 8.0;
-		else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
-			fdf->h_zarr = 5.0;
-		clean_main_map(fdf);
-	}
+		height_adjustmen(fdf, keykode);
 	mlx_clear_window(fdf->full->mlx, fdf->full->win);
-	// printf("PROJECTION = %d\n", ISO);
 	draw(fdf, fdf->proj ? matrix : set_iso_coords);
 	return (0);
 }
 
-int		key_release(int keykode, t_fdf *fdf)
+void	height_adjustmen(t_fdf *fdf, int keykode)
 {
-	t_proj	proj;
-
-	return (0);
+	fdf->ang.a_x = fdf->proj ? 120.0 : 0.0;
+	fdf->h_zarr *= keykode == 24 ? 1.1 : 0.9;
+	if (fdf->h_zarr > 8.0 && fdf->proj == ISO)
+		fdf->h_zarr = 8.0;
+	else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
+		fdf->h_zarr = 5.0;
+	clean_main_map(fdf);
 }
 
 int		mouse_press(int btn, int x, int y, t_fdf *fdf)

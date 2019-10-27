@@ -12,8 +12,6 @@ void	set_iso_coords(t_3dmap *map, double h_zarr, double siz)
 	map->y = (-map->z + (prev_x + prev_y) * sin(0.523599)) * siz;
 }
 
-
-
 void	clean_main_map(t_fdf *fdf)
 {
 	int	i;
