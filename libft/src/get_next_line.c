@@ -12,78 +12,76 @@
 
 #include "get_next_line.h"
 
-static int	save_in(char **stack, int fd, char **line)
+t_list	*ft_get(t_list **file, int fd)
 {
-	int i;
+	t_list		*tmp;
 
-	i = 0;
-	while (stack[fd][i] && stack[fd][i] != '\n')
-		i++;
-	CHECK((*line = ft_strsub(stack[fd], 0, i)));
-	return (i);
-}
-
-static char	*f_strchr(const char *s, int c)
-{
-	if (!s)
-		return (NULL);
-	while (*s != (char)c)
+	tmp = *file;
+	while (tmp)
 	{
-		if (!*s)
-			return (NULL);
-		s++;
+		if ((int)tmp->content_size == fd)
+			return (tmp);
+		tmp = tmp->next;
 	}
-	return ((char*)s);
+	if (!tmp)
+		tmp = ft_lstnew("", fd);
+	ft_lstadd(file, tmp);
+	tmp = *file;
+	return (tmp);
 }
 
-static int	go_to_func(char **stack, int fd, char **line)
+char	*ft_get_next(char **line, t_list *point)
 {
-	char	*forline;
-	char	*point;
-	int		len;
+	size_t			i;
+	char			*del;
 
-	if (f_strchr(stack[fd], '\n') != NULL)
+	if (ft_strchr((char *)point->content, '\n'))
 	{
-		len = save_in(stack, fd, line) + 1;
-		CHECK((forline = ft_strsub(stack[fd], len, ft_strlen(stack[fd]))));
-		ft_strdel(&stack[fd]);
-		CHECK((stack[fd] = ft_strdup(forline)));
-		ft_strdel(&forline);
+		*line = ft_strsub((char *)point->content, 0,\
+				ft_strchr((char *)point->content, '\n')\
+					- (char *)point->content);
+		i = ft_strchr((char *)point->content, '\n') - (char *)point->content;
+		del = point->content;
+		if (i < ft_strlen((char *)point->content))
+			point->content = ft_strdup(point->content + i + 1);
+		free(del);
 	}
 	else
 	{
-		point = stack[fd];
-		CHECK((*line = ft_strsub(stack[fd], 0, ft_strlen(stack[fd]))));
-		stack[fd] = &stack[fd][ft_strlen(stack[fd])];
-		free(point);
+		i = ft_strlen(point->content);
+		del = point->content;
+		*line = ft_strncpy(ft_strnew(i), (char *)point->content, i);
+		point->content = ft_strdup(point->content + i);
+		free(del);
 	}
-	return (1);
+	return (*line);
 }
 
-int			get_next_line(int fd, char **line)
+int		get_next_line(const int fd, char **line)
 {
-	static char	*stack[255];
-	char		buf[BUFF_SIZE + 1];
-	char		*forline;
-	int			size;
+	char			*buf;
+	int				i;
+	static t_list	*file;
+	t_list			*point;
+	char			*del;
 
-	if (fd < 0 || line == NULL)
+	if (!(buf = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1))))
 		return (-1);
-	while ((size = read(fd, buf, BUFF_SIZE)) > 0)
+	if (fd < 0 || BUFF_SIZE < 0 || read(fd, buf, 0))
+		return (-1);
+	point = ft_get(&file, fd);
+	while ((i = read(fd, buf, BUFF_SIZE)))
 	{
-		buf[size] = '\0';
-		if (stack[fd] == NULL)
-			CHECK((stack[fd] = ft_strnew(0)));
-		CHECK((forline = ft_strjoin(stack[fd], buf)));
-		ft_strdel(&stack[fd]);
-		CHECK((stack[fd] = ft_strdup(forline)));
-		ft_strdel(&forline);
-		if ((forline = f_strchr(stack[fd], '\n')) != NULL)
+		buf[i] = '\0';
+		del = point->content;
+		point->content = ft_strjoin((char *)point->content, buf);
+		free(del);
+		if (ft_strchr(buf, '\n'))
 			break ;
 	}
-	if (size < 0)
-		return (-1);
-	if (size == 0 && (stack[fd][0] == '\0' || stack[fd] == NULL))
+	free(buf);
+	if (i < BUFF_SIZE && !ft_strlen((char *)point->content))
 		return (0);
-	return (go_to_func(stack, fd, line));
+	*line = ft_get_next(line, point);
+	return (1);
 }

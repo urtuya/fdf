@@ -40,8 +40,7 @@ static void	set_off(t_fdf *fdf)
 	fdf->ang.a_z = 0.0;
 	fdf->full->x_err = fdf->full->hei / 2;
 	fdf->full->y_err = fdf->full->wid / 2;
-	fdf->color.start = 0x0000FF;
-	fdf->color.end = 0xFF0000;
+	fdf->color = 0x9933FF;
 }
 
 t_fdf		*init_fdf(char *filename)
@@ -58,9 +57,7 @@ t_fdf		*init_fdf(char *filename)
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		print_error("Error open file");
 	read_map(fdf, fd);
-	init_static_z(fdf, fd, filename);
 	init_zarr(fdf, fd, filename);
-	// exit(1);
 	normalize_z(fdf);
 	set_off(fdf);
 	init_3dmap(fdf);

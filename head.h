@@ -65,7 +65,6 @@ typedef struct	s_3dmap
 	double	x;
 	double	y;
 	double	z;
-	int		z_val;
 	double	coef;
 }				t_3dmap;
 
@@ -81,6 +80,7 @@ typedef struct	s_color
 	int		start;
 	int		end;
 	int		curr;
+	int		flag;
 	int		z_max;
 	int		z_min;
 	int		distance;
@@ -96,7 +96,7 @@ typedef struct	s_fdf
 	t_mouse ms;
 	t_key	key;
 	t_proj	proj;
-	t_color color;
+	int		color;
 
 	double	last_r;
 	double	r;
@@ -120,10 +120,6 @@ typedef struct	s_line
 	int		ys;
 	int		xe;
 	int		ye;
-	int		dx1;
-	int		dy1;
-	int		z1;
-	int		z2;
 }				t_line;
 
 //main.c

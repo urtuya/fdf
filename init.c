@@ -36,7 +36,7 @@ void			read_map(t_fdf *fdf, int fd)
 	close(fd);
 }
 
-void			init_static_z(t_fdf *fdf, int fd, char *filename)
+void			init_zarr(t_fdf *fdf, int fd, char *filename)
 {
 	char	*line;
 	int		i;
@@ -45,7 +45,7 @@ void			init_static_z(t_fdf *fdf, int fd, char *filename)
 
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		print_error("Invalid file");
-	check_malloc(fdf->static_z = (int**)malloc(sizeof(int*)\
+	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
 					* fdf->full->hei));
 	i = -1;
 	while (++i < fdf->full->hei)
@@ -53,41 +53,17 @@ void			init_static_z(t_fdf *fdf, int fd, char *filename)
 		if (get_next_line(fd, &line) < 0)
 			print_error("Error reading map");
 		check_malloc(tmp = ft_strsplit(line, ' '));
-		check_malloc(fdf->static_z[i] = (int*)malloc(sizeof(int)\
+		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
 					* fdf->full->wid));
 		j = -1;
 		while (++j < fdf->full->wid)
-			fdf->static_z[i][j] = ft_atoi(tmp[j]);
+			fdf->zarr[i][j] = ft_atoi(tmp[j]);
 		ft_strdel(&line);
 		ft_freesplit(tmp);
 	}
 }
 
-void			init_zarr(t_fdf *fdf, int fd, char *filename)
-{
-	int		i;
-	int		j;
-	double	mn;
-	double	mx;
-
-	mn = (double)fdf->static_z[0][0];
-	mx = (double)fdf->static_z[0][0];
-	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
-					* fdf->full->hei));
-	i = -1;
-	while (++i < fdf->full->hei)
-	{
-		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
-					* fdf->full->wid));
-		j = -1;
-		while (++j < fdf->full->wid)
-			fdf->zarr[i][j] = (double)fdf->static_z[i][j];
-	}
-	// fdf->color.z_max = fdf->static_z[0][0];
-	// fdf->color.z_min = fdf->static_z[0][0];
-}
-
-double			get_max_z(t_fdf *fdf)//double **zarr, int hei, int wid, t_color *color)
+double			get_max_z(t_fdf *fdf)
 {
 	double	mn;
 	double	mx;
@@ -108,12 +84,6 @@ double			get_max_z(t_fdf *fdf)//double **zarr, int hei, int wid, t_color *color)
 		}
 		i++;
 	}
-	fdf->color.z_max = (int)mx;
-	fdf->color.z_min = (int)mn;
-	fdf->color.distance = fdf->color.z_max - fdf->color.z_min;
-	// printf("zmax = %d\n", fdf->color.z_max);
-	// printf("mzin = %d\n", fdf->color.z_min);
-	// exit(0);
 	mx = fabs(mx) / 3.0 * 2.0;
 	mn = fabs(mn) / 3.0 * 2.0;
 	return (mx > mn ? mx : mn);
@@ -125,7 +95,7 @@ void			normalize_z(t_fdf *fdf)
 	int		j;
 	double	zdivisor;
 
-	zdivisor = get_max_z(fdf);//fdf->zarr, fdf->full->hei, fdf->full->wid, &fdf->color);
+	zdivisor = get_max_z(fdf);
 	if (!zdivisor)
 		return ;
 	i = 0;
@@ -139,9 +109,6 @@ void			normalize_z(t_fdf *fdf)
 		}
 		i++;
 	}
-	// fdf->color.z_max /= zdivisor;
-	// fdf->color.z_min /= zdivisor;
-	// fdf->color.distance = fdf->color.z_max - fdf->color.z_min;
 }
 
 static double	get_coef(int hei, int wid)
@@ -178,7 +145,6 @@ void			init_3dmap(t_fdf *fdf)
 			fdf->map[i][j].x = (double)(j - fdf->full->y_err);
 			fdf->map[i][j].y = (double)(i - fdf->full->x_err);
 			fdf->map[i][j].z = fdf->zarr[i][j] * fdf->h_zarr;
-			fdf->map[i][j].z_val = fdf->static_z[i][j];
 			fdf->map[i][j].coef = coef;
 		}
 	}
