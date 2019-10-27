@@ -2,7 +2,8 @@
 
 void		print_error(char *str)
 {
-	fprintf(stderr, "%s\n", str);
+	ft_putstr(str);
+	ft_putchar('\n');
 	exit(1);
 }
 

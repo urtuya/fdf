@@ -7,7 +7,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
-# include <stdio.h>
 
 # define HEI 1400
 # define WID 1200
