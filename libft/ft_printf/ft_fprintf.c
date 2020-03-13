@@ -1,45 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_matrix.c                                        :+:      :+:    :+:   */
+/*   ft_fprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vellery- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/07 23:57:59 by vellery-          #+#    #+#             */
-/*   Updated: 2020/03/03 19:07:19 by vellery-         ###   ########.fr       */
+/*   Created: 2020/02/14 08:49:54 by vellery-          #+#    #+#             */
+/*   Updated: 2020/02/14 08:49:55 by vellery-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
+#include "ft_fprintf.h"
 
-int	**ft_matrix(int stb, int str)
+static int		get_stream(FILE *stream)
 {
-	int **mat;
-	int i;
-	int j;
-
-
-
-	i = 0;
-	if (!(mat = (int**)malloc(sizeof(int*) * str)))
+	if (stream == stderr)
+		return (2);
+	else if (stream == stdout)
+		return (1);
+	else
 		return (0);
-	while (i < str)
-	{
-		if (!(mat[i] = (int*)malloc(sizeof(int) * stb)))
-			return (ft_ex_matdel(mat, i));
-		i++;
-	}
-	i = 0;
-	while (i < str)
-	{
-		j = 0;
-		while (j < stb)
-		{
-			mat[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-	return (mat);
+}
+
+int				ft_fprintf(FILE *stream, const char *format, ...)
+{
+	int		ret;
+	va_list	args;
+
+	ret = 0;
+	va_start(args, format);
+	ret = ft_printf_(args, format, get_stream(stream));
+	va_end(args);
+	return (ret);
 }

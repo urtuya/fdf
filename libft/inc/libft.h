@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   head.h                                             :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vellery- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vellery- <vellery-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 13:10:21 by vellery-          #+#    #+#             */
-/*   Updated: 2019/10/13 02:03:46 by vellery-         ###   ########.fr       */
+/*   Updated: 2020/03/03 19:07:04 by vellery-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <string.h>
 # include <stdint.h>
-# include "get_next_line.h"
 
 void			*ft_memset(void *b, int c, size_t len);
 void			ft_bzero(void *s, size_t n);
@@ -27,6 +26,7 @@ void			*ft_memchr(const void *s, int c, size_t n);
 int				ft_memcmp(const void *s1, const void *s2, size_t n);
 size_t			ft_strlen(const char *s);
 char			*ft_strdup(const char *s1);
+char			*ft_strndup(const char *s1, int n);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 char			*ft_strcat(char *s1, const char *s2);
 char			*ft_strncat(char *s1, const char *s2, size_t n);
@@ -46,6 +46,7 @@ intmax_t		ft_max(intmax_t a, intmax_t b);
 int				ft_atoi(const char *str);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
+int				ft_isnumber(char *str);
 int				ft_isalnum(int c);
 int				ft_isascii(int c);
 int				ft_isprint(int c);
@@ -77,6 +78,9 @@ char			*ft_strtrim(char const *s);
 char			*ft_itoa(int n);
 char			*ft_ftoa(long double val, int preci, int sign);
 char			**ft_strsplit(char const *s, char c);
+char			*ft_strnjoin(char *s1, char *s2, int len_s1, int len_s2);
+int				ft_isspace(int c);
+int				ft_isupper(int c);
 
 typedef struct	s_list
 {
@@ -97,7 +101,7 @@ void			ft_ex_prnt_arr(int *arr, int size);
 void			ft_ex_prnt(int **mat, int str, int stb);
 void			*ft_ex_matdel(int **mat, int str);
 void			ft_change_val(int **mat, int str_pos, int stb_pos, int val);
-
 char			*ft_intmaxtoa(intmax_t val, int base);
 char			*ft_uintmaxtoa(uintmax_t val, int base);
+
 #endif

@@ -1,27 +1,47 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   head.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 19:42:26 by vellery-          #+#    #+#             */
-/*   Updated: 2019/10/28 00:06:09 by oargrave         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef HEAD_H
 # define HEAD_H
 
 # include <fcntl.h>
-# include "../libft/inc/libft.h"
+# include "libft.h"
+# include "get_next_line.h"
 # include "mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
 
-# define HEI 1400
-# define WID 1200
+# ifdef __APPLE__
+#  define HEI 1400
+#  define WID 1200
+#  define KEY_PRESS 0
+#  define MOUSE_PRESS 0
+#  define MOUSE_MOVE 0
+#  define MOUSE_RELEASE 0
+#  define CLOSE_IMAGE 53
+#  define ISOMETRIC 18
+#  define PARAL 19
+#  define HEIGHT_UP 24
+#  define HEIGHT_DOWN 27
+#  define CHANGE_COLOR 20
+#  define DEFAULT_COLOR 6
+# elif __linux__
+#  define HEI 900
+#  define WID 600
+#  define KEY_PRESS 1L
+#  define MOUSE_PRESS 4L
+#  define MOUSE_MOVE 64L
+#  define MOUSE_RELEASE 8L
+#  define CLOSE_IMAGE 65307
+#  define ISOMETRIC 49
+#  define PARAL 50
+#  define HEIGHT_UP 61
+#  define HEIGHT_DOWN 45
+#  define CHANGE_COLOR 51
+#  define DEFAULT_COLOR 122
+# endif
+
+# define SCROLL_UP 4
+# define SCROLL_DOWN 5
+# define MOUSE_LEFT_CLICK 1
 
 typedef enum	e_projection
 {
@@ -81,6 +101,8 @@ typedef struct	s_fdf
 	t_proj	proj;
 	int		color;
 
+
+
 	double	r;
 	double	h_zarr;
 	double	prev_siz;
@@ -103,34 +125,45 @@ typedef struct	s_line
 	int		ye;
 }				t_line;
 
-void			check_malloc(void	*data);
-void			print_error(char *str);
 
-void			init_zarr(t_fdf *fdf, int fd, char *filename);
-void			read_map(t_fdf *fdf, int fd);
-void			init_3dmap(t_fdf *fdf);
-void			normalize_z(t_fdf *fdf);
 
+//-----------------------draw.c
 void			draw(t_fdf *fdf, void (*projection)(t_3dmap*, double, double));
 void			draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color);
 
-void			set_iso_coords(t_3dmap *map, double h_zarr, double siz);
-void			clean_main_map(t_fdf *fdf);
-
-int				mouse_move(int x, int y, t_fdf *fdf);
-int				mouse_release(int btn, int x, int y, t_fdf *fdf);
-int				mouse_press(int btn, int x, int y, t_fdf *fdf);
-int				key_release(int keykode, t_fdf *fdf);
-int				key_press(int keykode, t_fdf *fdf);
-
+//-----------------------perspective.c
+void			normalize_z(t_fdf *fdf);
 void			matrix(t_3dmap *map, double r, double siz);
 void			find_min_max(t_fdf *fdf);
 
+
+//-----------------------init.c
+t_fdf			*init_fdf(char *filename);
+void			init_zarr(t_fdf *fdf, int fd, char *filename);
+void			init_3dmap(t_fdf *fdf);
+
+
+//-----------------------error.c
+void			check_malloc(void	*data);
+void			print_error(char *str);
+void			print_help(t_map *map);
+
+
+//-----------------------rotation.c
 void			rotate(t_fdf *fdf);
 
-void			color_rendering(int keykode, t_fdf *fdf);
-void			drawing_height(int keykode, t_fdf *fdf);
-void			parallel_projection(t_fdf *fdf);
+//-----------------------helping.c
+void			clean_main_map(t_fdf *fdf);
+void			read_map(t_fdf *fdf, int fd);
 
-void			print_help(t_map *map);
+//------------------------iso.c
+void			set_iso_coords(t_3dmap *map, double h_zarr, double siz);
+
+//------------------------hooks (key_hooks.c mouse_hooks.c)
+int				key_press(int keykode, t_fdf *fdf);
+int				mouse_move(int x, int y, t_fdf *fdf);
+int				mouse_release(int btn, int x, int y, t_fdf *fdf);
+int				mouse_press(int btn, int x, int y, t_fdf *fdf);
+
+
 #endif

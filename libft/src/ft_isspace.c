@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_freesplit.c                                     :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vellery- <vellery-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vellery- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/13 01:57:12 by vellery-          #+#    #+#             */
-/*   Updated: 2020/01/24 12:16:42 by vellery-         ###   ########.fr       */
+/*   Created: 2020/02/14 08:52:20 by vellery-          #+#    #+#             */
+/*   Updated: 2020/02/14 08:52:38 by vellery-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-void	ft_freesplit(char **str)
+int	ft_isspace(int c)
 {
-	int		i;
-
-	i = 0;
-	while (str[i])
-	{
-		ft_strdel(&str[i]);
-		i++;
-	}
-	free(str);
+	return ((c >= 9 && c <= 13) || c == 32 ?
+			1 : 0);
 }

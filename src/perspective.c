@@ -1,18 +1,54 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   perspective.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 15:55:29 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 15:55:56 by oargrave         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "head.h"
 
-void	find_min_max(t_fdf *fdf)
+static double	get_max_z(t_fdf *fdf)
+{
+	double	mn;
+	double	mx;
+	int		i;
+	int		j;
+
+	mn = fdf->zarr[0][0];
+	mx = fdf->zarr[0][0];
+	i = 0;
+	while (i < fdf->full->hei)
+	{
+		j = 0;
+		while (j < fdf->full->wid)
+		{
+			mn = fdf->zarr[i][j] < mn ? fdf->zarr[i][j] : mn;
+			mx = fdf->zarr[i][j] > mx ? fdf->zarr[i][j] : mx;
+			j++;
+		}
+		i++;
+	}
+	mx = fabs(mx) / 3.0 * 2.0;
+	mn = fabs(mn) / 3.0 * 2.0;
+	return (mx > mn ? mx : mn);
+}
+
+void			normalize_z(t_fdf *fdf)
+{
+	int		i;
+	int		j;
+	double	zdivisor;
+
+	zdivisor = get_max_z(fdf);
+	if (!zdivisor)
+		return ;
+	i = 0;
+	while (i < fdf->full->hei)
+	{
+		j = 0;
+		while (j < fdf->full->wid)
+		{
+			fdf->zarr[i][j] /= zdivisor;
+			j++;
+		}
+		i++;
+	}
+}
+
+void			find_min_max(t_fdf *fdf)
 {
 	int			i;
 	int			j;
@@ -36,7 +72,7 @@ void	find_min_max(t_fdf *fdf)
 	fdf->r = fabs(mn) > fabs(mx) ? fabs(mx) : fabs(mn);
 }
 
-void	matrix(t_3dmap *map, double r, double siz)
+void			matrix(t_3dmap *map, double r, double siz)
 {
 	if (r)
 	{

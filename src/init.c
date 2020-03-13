@@ -1,91 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oargrave <oargrave@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/27 15:52:30 by oargrave          #+#    #+#             */
-/*   Updated: 2019/10/27 15:52:37 by oargrave         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "head.h"
-
-void			init_zarr(t_fdf *fdf, int fd, char *filename)
-{
-	char	*line;
-	int		i;
-	int		j;
-	char	**tmp;
-
-	if ((fd = open(filename, O_RDONLY)) < 0)
-		print_error("Invalid file");
-	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
-					* fdf->full->hei));
-	i = -1;
-	while (++i < fdf->full->hei)
-	{
-		if (get_next_line(fd, &line) < 0)
-			print_error("Error reading map");
-		check_malloc(tmp = ft_strsplit(line, ' '));
-		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
-					* fdf->full->wid));
-		j = -1;
-		while (++j < fdf->full->wid)
-			fdf->zarr[i][j] = ft_atoi(tmp[j]);
-		ft_strdel(&line);
-		ft_freesplit(tmp);
-	}
-}
-
-double			get_max_z(t_fdf *fdf)
-{
-	double	mn;
-	double	mx;
-	int		i;
-	int		j;
-
-	mn = fdf->zarr[0][0];
-	mx = fdf->zarr[0][0];
-	i = 0;
-	while (i < fdf->full->hei)
-	{
-		j = 0;
-		while (j < fdf->full->wid)
-		{
-			mn = fdf->zarr[i][j] < mn ? fdf->zarr[i][j] : mn;
-			mx = fdf->zarr[i][j] > mx ? fdf->zarr[i][j] : mx;
-			j++;
-		}
-		i++;
-	}
-	mx = fabs(mx) / 3.0 * 2.0;
-	mn = fabs(mn) / 3.0 * 2.0;
-	return (mx > mn ? mx : mn);
-}
-
-void			normalize_z(t_fdf *fdf)
-{
-	int		i;
-	int		j;
-	double	zdivisor;
-
-	zdivisor = get_max_z(fdf);
-	if (!zdivisor)
-		return ;
-	i = 0;
-	while (i < fdf->full->hei)
-	{
-		j = 0;
-		while (j < fdf->full->wid)
-		{
-			fdf->zarr[i][j] /= zdivisor;
-			j++;
-		}
-		i++;
-	}
-}
 
 static double	get_coef(int hei, int wid)
 {
@@ -124,4 +37,77 @@ void			init_3dmap(t_fdf *fdf)
 			fdf->map[i][j].coef = coef;
 		}
 	}
+}
+
+void			init_zarr(t_fdf *fdf, int fd, char *filename)
+{
+	char	*line;
+	int		i;
+	int		j;
+	char	**tmp;
+
+	if ((fd = open(filename, O_RDONLY)) < 0)
+		print_error("Invalid file");
+	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
+					* fdf->full->hei));
+	i = -1;
+	while (++i < fdf->full->hei)
+	{
+		if (get_next_line(fd, &line) < 0)
+			print_error("Error reading map");
+		check_malloc(tmp = ft_strsplit(line, ' '));
+		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
+					* fdf->full->wid));
+		j = -1;
+		while (++j < fdf->full->wid)
+			fdf->zarr[i][j] = ft_atoi(tmp[j]);
+		ft_strdel(&line);
+		ft_freesplit(tmp);
+	}
+}
+
+static void	set_off(t_fdf *fdf)
+{
+	double	a;
+	double	b;
+
+	fdf->h_zarr = 1.0;
+	fdf->siz = 1.0;
+	fdf->full->offx = HEI / 2;
+	fdf->full->offy = WID / 2;
+	a = WID / fdf->full->wid / 2;
+	b = HEI / fdf->full->hei / 2;
+	fdf->siz = a < b ? a : b;
+	fdf->siz = !fdf->siz ? 1 : fdf->siz;
+	fdf->prev_siz = fdf->siz;
+	fdf->ang.a_x = 0.0;
+	fdf->ang.a_y = 0.0;
+	fdf->ang.a_z = 0.0;
+	fdf->full->x_err = fdf->full->hei / 2;
+	fdf->full->y_err = fdf->full->wid / 2;
+	fdf->color = 0x9933FF;
+}
+
+t_fdf		*init_fdf(char *filename)
+{
+	t_fdf	*fdf;
+	int		fd;
+
+	check_malloc(fdf = (t_fdf*)malloc(sizeof(t_fdf)));
+	check_malloc(fdf->full = (t_map*)malloc(sizeof(t_map)));
+	fdf->full->wid = 0;
+	fdf->full->hei = 0;
+	fdf->zarr = NULL;
+	fdf->map = NULL;
+	if ((fd = open(filename, O_RDONLY)) < 0)
+		print_error("Error open file");
+	read_map(fdf, fd);
+	init_zarr(fdf, fd, filename);
+	normalize_z(fdf);
+	set_off(fdf);
+	init_3dmap(fdf);
+	fdf->ms = (t_mouse){0,0,0};
+	fdf->full->mlx = mlx_init();
+	fdf->full->win = mlx_new_window(fdf->full->mlx, HEI, WID, "FdF");
+	return (fdf);
 }

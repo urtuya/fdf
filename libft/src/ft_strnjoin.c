@@ -1,45 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_matrix.c                                        :+:      :+:    :+:   */
+/*   ft_strnjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vellery- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/07 23:57:59 by vellery-          #+#    #+#             */
-/*   Updated: 2020/03/03 19:07:19 by vellery-         ###   ########.fr       */
+/*   Created: 2019/08/23 18:41:41 by vellery-          #+#    #+#             */
+/*   Updated: 2019/08/23 18:41:42 by vellery-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-int	**ft_matrix(int stb, int str)
+char	*ft_strnjoin(char *s1, char *s2, int len_s1, int len_s2)
 {
-	int **mat;
-	int i;
-	int j;
+	char	*str;
+	int		i;
+	int		j;
 
-
-
+	if (!s1)
+		return (NULL);
+	str = (char*)malloc(sizeof(char) * (len_s1 + len_s2 + 1));
+	if (!str)
+		return (NULL);
 	i = 0;
-	if (!(mat = (int**)malloc(sizeof(int*) * str)))
-		return (0);
-	while (i < str)
+	while (i < len_s1)
 	{
-		if (!(mat[i] = (int*)malloc(sizeof(int) * stb)))
-			return (ft_ex_matdel(mat, i));
+		str[i] = s1[i];
 		i++;
 	}
-	i = 0;
-	while (i < str)
+	j = 0;
+	while (j < len_s2)
 	{
-		j = 0;
-		while (j < stb)
-		{
-			mat[i][j] = 0;
-			j++;
-		}
-		i++;
+		str[i + j] = s2[j];
+		j++;
 	}
-	return (mat);
+	str[i + j] = '\0';
+	return (str);
 }
