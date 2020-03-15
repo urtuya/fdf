@@ -106,8 +106,13 @@ t_fdf		*init_fdf(char *filename)
 	normalize_z(fdf);
 	set_off(fdf);
 	init_3dmap(fdf);
+
 	fdf->ms = (t_mouse){0,0,0};
 	fdf->full->mlx = mlx_init();
 	fdf->full->win = mlx_new_window(fdf->full->mlx, HEI, WID, "FdF");
+
+	fdf->full->map = mlx_new_image(fdf->full->mlx, HEI, WID);
+	fdf->full->data_addr = mlx_get_data_addr(fdf->full->map, &fdf->full->bpp, &fdf->full->size_line, &fdf->full->endian);
+	ft_bzero(fdf->full->data_addr, HEI * WID * fdf->full->bpp / 8);
 	return (fdf);
 }

@@ -68,9 +68,9 @@ int				key_press(int keykode, t_fdf *fdf)
 		drawing_height(keykode, fdf);
 	if (keykode == CHANGE_COLOR || keykode == DEFAULT_COLOR)
 		color_rendering(keykode, fdf);
-	mlx_clear_window(fdf->full->mlx, fdf->full->win);
-	print_help(fdf->full);
+	ft_bzero(fdf->full->data_addr, HEI * WID * fdf->full->bpp / 8);
 	draw(fdf, fdf->proj ? matrix : set_iso_coords);
+	print_help(fdf->full);
 	return (0);
 }
 

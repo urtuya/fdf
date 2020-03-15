@@ -5,7 +5,7 @@ CFILES = main.c init.c draw.c iso.c key_hooks.c rotation.c\
 		perspective.c put_pixel.c helping.c error.c mouse_hooks.c\
 		color.c
 SRC = $(addprefix $(SRC_DIR), $(CFILES))
-FLAG = -Wall -Wextra -Werror
+FLAG = #-Wall -Wextra -Werror
 UNAME := $(shell uname -s)
 LIBFT_DIR = libft/
 LIB = $(LIBFT_DIR)libft.a

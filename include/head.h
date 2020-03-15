@@ -61,6 +61,7 @@ typedef struct	s_coordinates
 	int		x;
 	int		y;
 	int		z;
+	int		color;
 }				t_coor;
 
 typedef struct	s_map
@@ -74,6 +75,12 @@ typedef struct	s_map
 	double	offy;
 	int		x_err;
 	int		y_err;
+
+	int		*map;
+	char	*data_addr;
+	int		bpp;
+	int		size_line;
+	int		endian;
 }				t_map;
 
 typedef struct	s_3dmap
@@ -101,28 +108,23 @@ typedef struct	s_fdf
 	t_proj	proj;
 	int		color;
 
-
-
 	double	r;
 	double	h_zarr;
 	double	prev_siz;
 	double	siz;
 	int		offx;
 	int		offy;
+
 }				t_fdf;
 
 typedef struct	s_line
 {
 	int		dx;
 	int		dy;
-	int		abs_dx;
-	int		abs_dy;
 	int		x;
 	int		y;
 	int		sy;
 	int		sx;
-	int		xe;
-	int		ye;
 }				t_line;
 
 

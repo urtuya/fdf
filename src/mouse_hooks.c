@@ -12,7 +12,7 @@ int		mouse_press(int btn, int x, int y, t_fdf *fdf)
 	else if ((btn == SCROLL_UP || btn == SCROLL_DOWN))
 	{
 		fdf->siz *= btn == 4 ? 1.1 : 0.9;
-		mlx_clear_window(fdf->full->mlx, fdf->full->win);
+		ft_bzero(fdf->full->data_addr, HEI * WID * fdf->full->bpp / 8);
 		draw(fdf, fdf->proj ? matrix : set_iso_coords);
 		print_help(fdf->full);
 	}
@@ -44,7 +44,7 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 		fdf->ang.a_y = (double)(y - prev_y) * 0.2;
 		fdf->ang.a_x = (double)(x - prev_x) * 0.2;
 		fdf->ang.a_z = (double)((x - prev_x) / 2 + (y - prev_y) / 2) * 0.2;
-		mlx_clear_window(fdf->full->mlx, fdf->full->win);
+		ft_bzero(fdf->full->data_addr, HEI * WID * fdf->full->bpp / 8);
 		draw(fdf, fdf->proj ? matrix : set_iso_coords);
 		print_help(fdf->full);
 	}
