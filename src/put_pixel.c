@@ -12,12 +12,13 @@ void	pixel_put(t_map *full, int x, int y, int color)
 }
 
 
-void		draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
+void		bresengham_draw_line(t_map *fdf, t_coor cr1, t_coor cr2)
 {
 	t_line	ln;
 	int		err1;
 	int		err2;
 
+	ln.color = cr1.color;
 	ln.dx = abs(cr1.x - cr2.x);
 	ln.dy = abs(cr1.y - cr2.y);
 	ln.sx = cr1.x < cr2.x ? 1 : -1;
@@ -29,7 +30,7 @@ void		draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
 	{
 		if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > WID))
 		{
-			pixel_put(fdf, ln.x + (int)fdf->offx, ln.y + (int)fdf->offy, color);
+			pixel_put(fdf, ln.x + (int)fdf->offx, ln.y + (int)fdf->offy, get_color(ln, cr1, cr2));
 		}
 		err2 = err1 * 2;
 		if (err2 > -ln.dy)
@@ -44,3 +45,4 @@ void		draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color)
 		}
 	}
 }
+

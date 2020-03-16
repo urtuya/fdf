@@ -8,6 +8,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
+# include <limits.h>
 
 # ifdef __APPLE__
 #  define HEI 1400
@@ -56,6 +57,12 @@ typedef struct	s_mouse
 	int y;
 }				t_mouse;
 
+typedef	struct	s_color
+{
+	int start;
+	int end;
+}				t_color;
+
 typedef struct	s_coordinates
 {
 	int		x;
@@ -76,6 +83,8 @@ typedef struct	s_map
 	int		x_err;
 	int		y_err;
 
+
+
 	int		*map;
 	char	*data_addr;
 	int		bpp;
@@ -89,6 +98,7 @@ typedef struct	s_3dmap
 	double	y;
 	double	z;
 	double	coef;
+	double	static_z;
 }				t_3dmap;
 
 typedef struct	s_angle
@@ -98,6 +108,13 @@ typedef struct	s_angle
 	double	a_z;
 }				t_angle;
 
+// typedef struct	s_color
+// {
+// 	int start;
+// 	int curr;
+// 	int end;
+// }				t_color;
+
 typedef struct	s_fdf
 {
 	t_map	*full;
@@ -106,7 +123,10 @@ typedef struct	s_fdf
 	t_angle	ang;
 	t_mouse ms;
 	t_proj	proj;
-	int		color;
+	t_color color;
+
+	double	z_max;
+	double	z_min;
 
 	double	r;
 	double	h_zarr;
@@ -125,13 +145,17 @@ typedef struct	s_line
 	int		y;
 	int		sy;
 	int		sx;
+	int		color;
+
+	int		xe;
+	int		ye;
 }				t_line;
 
 
 
 //-----------------------draw.c
 void			draw(t_fdf *fdf, void (*projection)(t_3dmap*, double, double));
-void			draw_line(t_map *fdf, t_coor cr1, t_coor cr2, int color);
+void			bresengham_draw_line(t_map *fdf, t_coor cr1, t_coor cr2);
 
 //-----------------------perspective.c
 void			normalize_z(t_fdf *fdf);
@@ -140,7 +164,7 @@ void			find_min_max(t_fdf *fdf);
 
 
 //-----------------------init.c
-t_fdf			*init_fdf(char *filename);
+t_fdf			*init_fdf(int ac, char **av);
 void			init_zarr(t_fdf *fdf, int fd, char *filename);
 void			init_3dmap(t_fdf *fdf);
 
@@ -167,5 +191,6 @@ int				mouse_move(int x, int y, t_fdf *fdf);
 int				mouse_release(int btn, int x, int y, t_fdf *fdf);
 int				mouse_press(int btn, int x, int y, t_fdf *fdf);
 
-
+//-------------------------color.c
+double percent(double start, double end, double current);
 #endif

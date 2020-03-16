@@ -24,10 +24,11 @@ void		apply_hooks(t_fdf *fdf)
 int			main(int argc, char **argv)
 {
 	t_fdf	*fdf;
-
-	if (argc != 2)
+	
+	// ft_atointmax(argv[2], 10);
+	if (argc != 2 && argc != 4)
 		print_error("Usage: ./fdf [file]");
-	fdf = init_fdf(argv[1]);
+	fdf = init_fdf(argc, argv + 1);
 	draw(fdf, fdf->proj == PARALLEL ? matrix : set_iso_coords);
 	apply_hooks(fdf);
 	mlx_loop(fdf->full->mlx);

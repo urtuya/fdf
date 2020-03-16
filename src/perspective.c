@@ -21,6 +21,8 @@ static double	get_max_z(t_fdf *fdf)
 		}
 		i++;
 	}
+	fdf->z_max = mx;
+	fdf->z_min = mn;
 	mx = fabs(mx) / 3.0 * 2.0;
 	mn = fabs(mn) / 3.0 * 2.0;
 	return (mx > mn ? mx : mn);
@@ -46,6 +48,8 @@ void			normalize_z(t_fdf *fdf)
 		}
 		i++;
 	}
+	fdf->z_max /= zdivisor;
+	fdf->z_min /= zdivisor;
 }
 
 void			find_min_max(t_fdf *fdf)

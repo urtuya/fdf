@@ -34,6 +34,7 @@ void			init_3dmap(t_fdf *fdf)
 			fdf->map[i][j].x = (double)(j - fdf->full->y_err);
 			fdf->map[i][j].y = (double)(i - fdf->full->x_err);
 			fdf->map[i][j].z = fdf->zarr[i][j] * fdf->h_zarr;
+			fdf->map[i][j].static_z = fdf->zarr[i][j];
 			fdf->map[i][j].coef = coef;
 		}
 	}
@@ -48,19 +49,19 @@ void			init_zarr(t_fdf *fdf, int fd, char *filename)
 
 	if ((fd = open(filename, O_RDONLY)) < 0)
 		print_error("Invalid file");
-	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*)\
-					* fdf->full->hei));
+	check_malloc(fdf->zarr = (double**)malloc(sizeof(double*) * fdf->full->hei));
 	i = -1;
 	while (++i < fdf->full->hei)
 	{
 		if (get_next_line(fd, &line) < 0)
 			print_error("Error reading map");
 		check_malloc(tmp = ft_strsplit(line, ' '));
-		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double)\
-					* fdf->full->wid));
+		check_malloc(fdf->zarr[i] = (double*)malloc(sizeof(double) * fdf->full->wid));
 		j = -1;
 		while (++j < fdf->full->wid)
+		{
 			fdf->zarr[i][j] = ft_atoi(tmp[j]);
+		}
 		ft_strdel(&line);
 		ft_freesplit(tmp);
 	}
@@ -85,28 +86,39 @@ static void	set_off(t_fdf *fdf)
 	fdf->ang.a_z = 0.0;
 	fdf->full->x_err = fdf->full->hei / 2;
 	fdf->full->y_err = fdf->full->wid / 2;
-	fdf->color = 0x9933FF;
 }
 
-t_fdf		*init_fdf(char *filename)
+t_fdf		*init_fdf(int ac, char **av)
 {
 	t_fdf	*fdf;
 	int		fd;
 
 	check_malloc(fdf = (t_fdf*)malloc(sizeof(t_fdf)));
+	if (ac == 4)
+	{
+		if (!ft_isnumber(av[1]) || !ft_isnumber(av[2]))
+			print_error("BAD ARGUMENT: colors");
+		fdf->color.start = ft_atoi(av[1]);
+		fdf->color.end = ft_atoi(av[2]);
+	}
+	else
+		// fdf->color = (t_color){0x8E52D2, 0x3333FF};
+		fdf->color = (t_color){0xFFFF33, 0xFF007F};
 	check_malloc(fdf->full = (t_map*)malloc(sizeof(t_map)));
 	fdf->full->wid = 0;
 	fdf->full->hei = 0;
+	fdf->z_max = (double)INT_MIN;
+	fdf->z_min = (double)INT_MAX;
 	fdf->zarr = NULL;
 	fdf->map = NULL;
-	if ((fd = open(filename, O_RDONLY)) < 0)
+	if ((fd = open(av[0], O_RDONLY)) < 0)
 		print_error("Error open file");
 	read_map(fdf, fd);
-	init_zarr(fdf, fd, filename);
+	init_zarr(fdf, fd, av[0]);
 	normalize_z(fdf);
 	set_off(fdf);
+	printf("start = %#x end = %#x\n", fdf->color.start, fdf->color.end);
 	init_3dmap(fdf);
-
 	fdf->ms = (t_mouse){0,0,0};
 	fdf->full->mlx = mlx_init();
 	fdf->full->win = mlx_new_window(fdf->full->mlx, HEI, WID, "FdF");

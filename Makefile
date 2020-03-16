@@ -3,7 +3,7 @@ NAME = fdf
 SRC_DIR = src/
 CFILES = main.c init.c draw.c iso.c key_hooks.c rotation.c\
 		perspective.c put_pixel.c helping.c error.c mouse_hooks.c\
-		color.c
+		color.c #wu.c
 SRC = $(addprefix $(SRC_DIR), $(CFILES))
 FLAG = #-Wall -Wextra -Werror
 UNAME := $(shell uname -s)
@@ -33,7 +33,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(INCS)
-	@gcc -c $(FLAG) $(INC) $< -o $@
+	@gcc -c -g $(FLAG) $(INC) $< -o $@
 
 clean:
 	make clean -C libft
