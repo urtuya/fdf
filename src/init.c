@@ -117,7 +117,6 @@ t_fdf		*init_fdf(int ac, char **av)
 	init_zarr(fdf, fd, av[0]);
 	normalize_z(fdf);
 	set_off(fdf);
-	printf("start = %#x end = %#x\n", fdf->color.start, fdf->color.end);
 	init_3dmap(fdf);
 	fdf->ms = (t_mouse){0,0,0};
 	fdf->full->mlx = mlx_init();

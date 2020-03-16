@@ -33,8 +33,8 @@ intmax_t	ft_atointmax(char *str, int base)
 	while (str[i])
 	{
 		digit = str[len] + '0';
-		printf("digit = %d\n", digit);
-		exit(0);
+		// printf("digit = %d\n", digit);
+		// exit(0);
 		// if (str[i])
 	}
 }

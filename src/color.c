@@ -7,8 +7,6 @@ double percent(double start, double end, double current)
 
     placement = current - start;
     distance = end - start;
-    // printf("%f %f %f\n", start, current, end);
-    // printf("pplacement %f distance %f\n", placement, distance);
     return ((distance == 0) ? 1.0 : (placement / distance));
 }
 

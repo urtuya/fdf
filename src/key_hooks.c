@@ -25,7 +25,7 @@ static void		drawing_height(int keykode, t_fdf *fdf)
 	fdf->h_zarr *= keykode == HEIGHT_UP ? 1.1 : 0.9;
 
 	//--------------------DO NOT DELETE
-
+	//code for limitations------------------
 	// if (fdf->h_zarr > 7.0 && fdf->proj == ISO)
 	// 	fdf->h_zarr = 7.0;
 	// else if (fdf->h_zarr > 5.0 && fdf->proj == PARALLEL)
@@ -38,6 +38,7 @@ static void		color_rendering(int keykode, t_fdf *fdf)
 	char	colors[12];
 
 	fdf->ang.a_x = 0.0;
+	//trying to add different color realisation
 	if (keykode == DEFAULT_COLOR)
 		fdf->color = (t_color){0x9933FF, 0x9933FF};
 }

@@ -146,9 +146,6 @@ typedef struct	s_line
 	int		sy;
 	int		sx;
 	int		color;
-
-	int		xe;
-	int		ye;
 }				t_line;
 
 
@@ -192,5 +189,7 @@ int				mouse_release(int btn, int x, int y, t_fdf *fdf);
 int				mouse_press(int btn, int x, int y, t_fdf *fdf);
 
 //-------------------------color.c
-double percent(double start, double end, double current);
+double			percent(double start, double end, double current);
+int				get_color(t_line ln, t_coor cr1, t_coor cr2);
+int				get_light(int start, int end, double percentage);
 #endif

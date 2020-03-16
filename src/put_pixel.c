@@ -28,7 +28,8 @@ void		bresengham_draw_line(t_map *fdf, t_coor cr1, t_coor cr2)
 	ln.y = cr1.y;
 	while (ln.x != cr2.x || ln.y != cr2.y)
 	{
-		if (!(ln.x + fdf->offx < 0 || ln.x + fdf->offx > HEI || ln.y + fdf->offy < 0 || ln.y + fdf->offy > WID))
+		if (!(ln.x + (int)fdf->offx < 0 || ln.x + (int)fdf->offx > HEI ||
+			ln.y + (int)fdf->offy < 0 || ln.y + (int)fdf->offy > WID))
 		{
 			pixel_put(fdf, ln.x + (int)fdf->offx, ln.y + (int)fdf->offy, get_color(ln, cr1, cr2));
 		}
