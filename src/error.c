@@ -2,8 +2,8 @@
 
 void		print_error(char *str)
 {
-	ft_putstr(str);
-	ft_putchar('\n');
+	ft_putstr_fd(str, 2);
+	ft_putchar_fd('\n', 2);
 	exit(1);
 }
 
@@ -23,4 +23,11 @@ void		print_help(t_map *map)
 							"Change color: 3/'z'(default)");
 	mlx_string_put(map->mlx, map->win, 20, 80, 0xFFFFFF,
 							"Change zoom: mouse scroll up/down");
+}
+
+void		usage()
+{
+	ft_putstr_fd("Usage: ./fdf [file] [color_start, color_end]\n", 2);
+	ft_putstr_fd("\n color\t: color in hex (Ex. 0xffffff)\n", 2);
+	exit(1);
 }

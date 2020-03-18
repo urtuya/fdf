@@ -81,6 +81,9 @@ char			**ft_strsplit(char const *s, char c);
 char			*ft_strnjoin(char *s1, char *s2, int len_s1, int len_s2);
 int				ft_isspace(int c);
 int				ft_isupper(int c);
+int				ft_islower(int c);
+int				lower_upper(int c, int b);
+intmax_t		ft_atoi_base(char *str, int base);
 
 typedef struct	s_list
 {

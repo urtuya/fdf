@@ -4,6 +4,7 @@
 # include <fcntl.h>
 # include "libft.h"
 # include "get_next_line.h"
+# include "ft_fprintf.h"
 # include "mlx.h"
 # include <unistd.h>
 # include <stdlib.h>
@@ -170,6 +171,7 @@ void			init_3dmap(t_fdf *fdf);
 void			check_malloc(void	*data);
 void			print_error(char *str);
 void			print_help(t_map *map);
+void			usage();
 
 
 //-----------------------rotation.c

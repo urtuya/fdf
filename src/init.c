@@ -98,8 +98,10 @@ t_fdf		*init_fdf(int ac, char **av)
 	{
 		if (!ft_isnumber(av[1]) || !ft_isnumber(av[2]))
 			print_error("BAD ARGUMENT: colors");
-		fdf->color.start = ft_atoi(av[1]);
-		fdf->color.end = ft_atoi(av[2]);
+		fdf->color.start = ft_atoi_base(av[1], 16);
+		fdf->color.end = ft_atoi_base(av[2], 16);
+		if (fdf->color.start == 0x0 || fdf->color.end == 0x0)
+			ft_fprintf(stderr, "{red}Warning! You've chosen BLACK color\n");
 	}
 	else
 		// fdf->color = (t_color){0x8E52D2, 0x3333FF};

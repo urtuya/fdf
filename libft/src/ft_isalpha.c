@@ -25,3 +25,10 @@ int	ft_isupper(int c)
 		return (1);
 	return (0);
 }
+
+int ft_islower(int c)
+{
+	if (c >= 97 && c <= 122)
+		return (1);
+	return (0);
+}

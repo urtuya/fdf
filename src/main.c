@@ -25,9 +25,8 @@ int			main(int argc, char **argv)
 {
 	t_fdf	*fdf;
 	
-	// ft_atointmax(argv[2], 10);
 	if (argc != 2 && argc != 4)
-		print_error("Usage: ./fdf [file]");
+		usage();
 	fdf = init_fdf(argc, argv + 1);
 	draw(fdf, fdf->proj == PARALLEL ? matrix : set_iso_coords);
 	apply_hooks(fdf);
