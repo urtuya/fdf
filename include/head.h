@@ -109,13 +109,6 @@ typedef struct	s_angle
 	double	a_z;
 }				t_angle;
 
-// typedef struct	s_color
-// {
-// 	int start;
-// 	int curr;
-// 	int end;
-// }				t_color;
-
 typedef struct	s_fdf
 {
 	t_map	*full;
